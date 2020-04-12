@@ -3,7 +3,7 @@
 /* Magic Mirror
  * Module: MMM-nutrislice-menu
  *
- * By Blankenship Mirror
+ * By Kurtis Blankenship
  * MIT Licensed.
  */
 
@@ -38,13 +38,8 @@ Module.register("MMM-nutrislice-menu", {
 	 */
 	getData: function() {
 		var self = this;
-
-		//var urlApi = "https://jsonplaceholder.typicode.com/posts/1";
-		const schoolEndpoint = this.config.schoolEndpoint;
-    	const menuType = this.config.menuType;
-    	const currentDate = new Date();
-    	var urlApi = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
-		console.log(urlApi)
+		var urlApi = "https://jsonplaceholder.typicode.com/posts/1";
+		console.log("endpoint: ", urlApi);
 		var retry = true;
 
 		var dataRequest = new XMLHttpRequest();
@@ -149,6 +144,11 @@ Module.register("MMM-nutrislice-menu", {
 
 		// the data if load
 		// send notification to helper
+		const schoolEndpoint = this.config.schoolEndpoint;
+    	const menuType = this.config.menuType;
+    	const currentDate = new Date();
+		const endpoint = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
+		console.log(endpoint);
 		this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", data);
 	},
 
@@ -158,6 +158,10 @@ Module.register("MMM-nutrislice-menu", {
 			// set dataNotification
 			this.dataNotification = payload;
 			this.updateDom();
+		}
+		if(notification === "DATA_RECEIVED") {
+			console.log("data recieved")
+			console.log(payload)
 		}
 	},
 });
