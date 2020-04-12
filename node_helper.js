@@ -24,8 +24,8 @@ module.exports = NodeHelper.create({
 		this.requestAsync(endpoint)
 		  .then(function (data) {
 				console.log(data);
-				//this.sendSocketNotification("STATS_RESULT", data);
-				return data;
+				this.sendSocketNotification("DATA_REQUEST", data);
+				//return data;
 		  })
 		  .catch(function (err) {
 				console.log(err);
@@ -50,11 +50,10 @@ module.exports = NodeHelper.create({
 		}
 		if (notification === "DATA_REQUEST") {
 			console.log("DATA URL:", payload);
-			var data = {};
-			data = this.getStats(payload);
-			console.log("data pulled: ");
-			console.log(data);
-			this.sendSocketNotification("DATA_REQUEST", data);
+			this.getStats(payload);
+			//console.log("data pulled: ");
+			//console.log(data);
+			//this.sendSocketNotification("DATA_REQUEST", data);
 			//this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", this.anotherFunction());
 		}
 	},
