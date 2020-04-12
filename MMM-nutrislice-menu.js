@@ -110,7 +110,7 @@ Module.register("MMM-nutrislice-menu", {
 		if (this.dataNotification) {
 			var wrapperDataNotification = document.createElement("div");
 			// translations  + datanotification
-			wrapperDataNotification.innerHTML =  this.translate("UPDATE") + ": " + this.dataNotification.date;
+			wrapperDataNotification.innerHTML =  this.translate("UPDATE") + ": " + this.dataNotification.date + this.result;
 
 			wrapper.appendChild(wrapperDataNotification);
 		}
@@ -161,8 +161,9 @@ Module.register("MMM-nutrislice-menu", {
 			this.updateDom();
 		}
 		if(notification === "DATA_RECEIVED") {
-			console.log("data recieved")
-			console.log(payload)
+			console.log("data recieved:", payload);
+			this.result = payload;
+			this.updateDom();
 		}
 	},
 });

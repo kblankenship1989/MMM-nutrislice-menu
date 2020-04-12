@@ -25,7 +25,7 @@ module.exports = NodeHelper.create({
 		}
 		if (notification === "DATA_REQUEST") {
 			console.log("DATA URL:", payload)
-			this.sendNotificationTest("Hello world")
+			this.sendSocketNotification("DATA_RECEIVED","Hello world")
 		}
 	},
 
