@@ -111,6 +111,7 @@ Module.register("MMM-nutrislice-menu", {
 			var wrapperDataNotification = document.createElement("div");
 			// translations  + datanotification
 			wrapperDataNotification.innerHTML =  this.translate("UPDATE") + ": " + this.dataNotification.date + ":" + this.result;
+			wrapperDataNotification.innerHTML =  "Data" + ": " + this.result;
 			wrapper.appendChild(wrapperDataNotification);
 		}
 		return wrapper;
@@ -162,8 +163,8 @@ Module.register("MMM-nutrislice-menu", {
 		}
 		if(notification === "DATA_REQUEST") {
 			console.log("data recieved:", payload);
-			this.dataNotification = payload;
-			this.result = "Hello World";
+			//this.dataNotification = payload;
+			this.result = payload;
 			this.updateDom();
 		}
 	},
