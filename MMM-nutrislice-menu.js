@@ -39,7 +39,12 @@ Module.register("MMM-nutrislice-menu", {
 	getData: function() {
 		var self = this;
 
-		var urlApi = "https://jsonplaceholder.typicode.com/posts/1";
+		//var urlApi = "https://jsonplaceholder.typicode.com/posts/1";
+		const schoolEndpoint = this.config.schoolEndpoint;
+    	const menuType = this.config.menuType;
+    	const currentDate = new Date();
+    	var urlApi = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
+		console.log(urlApi)
 		var retry = true;
 
 		var dataRequest = new XMLHttpRequest();
@@ -49,6 +54,7 @@ Module.register("MMM-nutrislice-menu", {
 			if (this.readyState === 4) {
 				console.log(this.status);
 				if (this.status === 200) {
+					console.log(this.response)
 					self.processData(JSON.parse(this.response));
 				} else if (this.status === 401) {
 					self.updateDom(self.config.animationSpeed);
