@@ -160,9 +160,10 @@ Module.register("MMM-nutrislice-menu", {
 			this.result = "test";
 			this.updateDom();
 		}
-		if(notification === "DATA_RECEIVED") {
+		if(notification === "DATA_REQUEST") {
 			console.log("data recieved:", payload);
-			this.result = payload;
+			this.dataNotification = payload;
+			this.result = "Hello World";
 			this.updateDom();
 		}
 	},

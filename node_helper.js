@@ -25,8 +25,8 @@ module.exports = NodeHelper.create({
 		}
 		if (notification === "DATA_REQUEST") {
 			console.log("DATA URL:", payload)
-			//this.sendSocketNotification("DATA_RECEIVED","Hello world")
-			this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", this.anotherFunction())
+			this.sendSocketNotification("DATA_REQUEST",this.anotherFunction())
+			//this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", this.anotherFunction())
 		}
 	},
 
