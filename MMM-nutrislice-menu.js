@@ -110,7 +110,8 @@ Module.register("MMM-nutrislice-menu", {
 		if (this.dataNotification) {
 			var wrapperDataNotification = document.createElement("div");
 			// translations  + datanotification
-			wrapperDataNotification.innerHTML =  this.translate("UPDATE") + ": " + this.dataNotification.date + this.result;
+			//wrapperDataNotification.innerHTML =  this.translate("UPDATE") + ": " + this.dataNotification.date;
+			wrapperDataNotification.innerHTML =  this.result;
 
 			wrapper.appendChild(wrapperDataNotification);
 		}
@@ -145,7 +146,7 @@ Module.register("MMM-nutrislice-menu", {
 		// the data if load
 		// send notification to helper
 		const schoolEndpoint = this.config.schoolEndpoint;
-    	const menuType = this.config.menuType;
+    	const menuType = "lunch"; //this.config.menuType;
     	const currentDate = new Date();
 		const endpoint = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
 		console.log(endpoint);
