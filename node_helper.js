@@ -6,6 +6,7 @@
  */
 
 var NodeHelper = require("node_helper");
+const request = require("request");
 
 module.exports = NodeHelper.create({
 
@@ -22,22 +23,22 @@ module.exports = NodeHelper.create({
 		// Wait for all promises, then merge data together. Duplicate keys WILL be clobbered.
 		this.requestAsync(endpoint)
 		  .then(function (data) {
-			console.log(data);
-			//this.sendSocketNotification("STATS_RESULT", data);
+				console.log(data);
+				//this.sendSocketNotification("STATS_RESULT", data);
 			return data;
 		  })
 		  .catch(function (err) {
-			console.log(err);
-		});
+				console.log(err);
+			});
 	},
 
 	// Nice little request wrapper from: https://stackoverflow.com/questions/32828415/how-to-run-multiple-async-functions-then-execute-callback
 	requestAsync: function(url) {
 		return new Promise(function (resolve, reject) {
-		request(url, function (err, res, body) {
-			if (err) { return reject(err); }
-			return resolve(JSON.parse(body));
-		});
+			request(url, function (err, res, body) {
+				if (err) { return reject(err); }
+				return resolve(JSON.parse(body));
+			});
 		});
 	},
 
