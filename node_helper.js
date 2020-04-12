@@ -25,7 +25,7 @@ module.exports = NodeHelper.create({
 		  .then(function (data) {
 				console.log(data);
 				//this.sendSocketNotification("STATS_RESULT", data);
-			return data;
+				return data;
 		  })
 		  .catch(function (err) {
 				console.log(err);
@@ -49,10 +49,9 @@ module.exports = NodeHelper.create({
 			this.sendNotificationTest(this.anotherFunction()); //Is possible send objects :)
 		}
 		if (notification === "DATA_REQUEST") {
-			console.log("DATA URL:", payload)
-
-			this.sendSocketNotification("DATA_REQUEST", this.getStats(payload))
-			//this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", this.anotherFunction())
+			console.log("DATA URL:", payload);
+			this.sendSocketNotification("DATA_REQUEST", this.getStats(payload));
+			//this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", this.anotherFunction());
 		}
 	},
 
