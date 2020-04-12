@@ -164,7 +164,7 @@ Module.register("MMM-nutrislice-menu", {
 		if(notification === "DATA_REQUEST") {
 			console.log("data recieved:", payload);
 			//this.dataNotification = payload;
-			this.result = payload;
+			this.result = "Hello World " + payload.start_date;
 			this.updateDom();
 		}
 	},
