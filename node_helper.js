@@ -50,7 +50,11 @@ module.exports = NodeHelper.create({
 		}
 		if (notification === "DATA_REQUEST") {
 			console.log("DATA URL:", payload);
-			this.sendSocketNotification("DATA_REQUEST", this.getStats(payload));
+			var data = {};
+			data = this.getStats(payload);
+			console.log("data pulled: ");
+			console.log(data);
+			this.sendSocketNotification("DATA_REQUEST", data);
 			//this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", this.anotherFunction());
 		}
 	},
