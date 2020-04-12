@@ -38,7 +38,8 @@ Module.register("MMM-nutrislice-menu", {
 	 */
 	getData: function() {
 		var self = this;
-		var urlApi = "https://jsonplaceholder.typicode.com/posts/1";
+		//var urlApi = "https://jsonplaceholder.typicode.com/posts/1";
+		var urlApi = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2020/4/12/";
 		console.log("endpoint: ", urlApi);
 		var retry = true;
 
@@ -149,8 +150,8 @@ Module.register("MMM-nutrislice-menu", {
     	const currentDate = new Date();
 		const endpoint = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
 		console.log(endpoint);
-		//this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", data);
-		this.sendSocketNotification("DATA_REQUEST", endpoint);
+		this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", data);
+		//this.sendSocketNotification("DATA_REQUEST", endpoint);
 	},
 
 	// socketNotificationReceived from helper
