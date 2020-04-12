@@ -149,7 +149,8 @@ Module.register("MMM-nutrislice-menu", {
     	const currentDate = new Date();
 		const endpoint = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
 		console.log(endpoint);
-		this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", data);
+		//this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", data);
+		this.sendSocketNotification("DATA_REQUEST", endpoint);
 	},
 
 	// socketNotificationReceived from helper

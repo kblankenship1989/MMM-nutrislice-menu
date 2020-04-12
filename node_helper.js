@@ -23,6 +23,10 @@ module.exports = NodeHelper.create({
 			// Send notification
 			this.sendNotificationTest(this.anotherFunction()); //Is possible send objects :)
 		}
+		if (notification === "DATA_REQUEST") {
+			console.log("DATA URL:", payload)
+			this.sendNotificationTest("Hello world")
+		}
 	},
 
 	// Example function send notification test
