@@ -117,8 +117,9 @@ Module.register("MMM-nutrislice-menu", {
 			// 	}
 			//   }
 				for (day in this.dataRequest.days) {
-					tableElement.appendChild(day.date);
+					daylist.push(day.date);
 				}
+				tableElement.innerHTML = daylist.parse
 			}
 
 			var labelDataRequest = document.createElement("label");
