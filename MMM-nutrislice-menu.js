@@ -56,7 +56,7 @@ Module.register("MMM-nutrislice-menu", {
 			if (this.readyState === 4) {
 				console.log(this.status);
 				if (this.status === 200) {
-					console.log(this.response)
+					//console.log(this.response)
 					self.processData(JSON.parse(this.response));
 				} else if (this.status === 401) {
 					self.updateDom(self.config.animationSpeed);
@@ -105,7 +105,7 @@ Module.register("MMM-nutrislice-menu", {
 
 			//var tableElement = document.createElement("table");
 			var tableElement = document.createElement("div");
-			//const mapOfDays = this.getMapOfDays(this.dataRequest);
+			const mapOfDays = this.getMapOfDays(this.dataRequest);
 			//if (Object.keys(mapOfDays).length > 0) {
 			if ((this.dataRequest.days || []).length > 0) {
 			//   for (key in Object.keys(mapOfDays)) {
@@ -117,8 +117,8 @@ Module.register("MMM-nutrislice-menu", {
 			// 	}
 			//   }
 				var daylist = [];
-				for (day in this.dataRequest.days) {
-					daylist.push(day.date);
+				for (key in Object.keys(this.dataRequest.days)) {
+					daylist.push(this.dataRequest.days[key].date);
 				}
 				tableElement.innerHTML = daylist;
 			}
@@ -168,7 +168,7 @@ Module.register("MMM-nutrislice-menu", {
 			  mapOfDays[getWeekDay(day.date)] = listOfItems;
 		  }
 		}
-
+		console.log(mapOfDays);
 		return mapOfDays;
 	  },
 
