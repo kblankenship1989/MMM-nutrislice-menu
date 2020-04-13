@@ -171,7 +171,8 @@ Module.register("MMM-nutrislice-menu", {
 		for (key in Object.keys(data.days)) {
 		  if (data.days[key] && data.days[key].date && (data.days[key].menu_items || []).length) {
 			  var listOfItems = [];
-			  for (item in data.days[key].menu_items) {
+			  for (itemKey in Object.keys(data.days[key].menu_items)) {
+				  	var item = data.days[key].menu_items[itemKey];
 					var textToDisplay = "";
 					if (item.text) {
 				  textToDisplay += item.text;
