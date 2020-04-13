@@ -118,12 +118,11 @@ Module.register("MMM-nutrislice-menu", {
 			// 	}
 			//   }
 				var daylist = [];
-				console.log(typeof this.dataRequest.days)
 				for (key in Object.keys(this.dataRequest.days)) {
-					console.log(key);
 					var dayItem = document.createElement("span");
 					dayItem.innerHTML = this.dataRequest.days[key].date;
 					tableElement.appendChild(dayItem);
+					tableElement.appendChild(document.createElement("br"));
 					//daylist.push(this.dataRequest.days[key].date);
 				}
 				//tableElement.innerHTML = daylist;
@@ -188,7 +187,7 @@ Module.register("MMM-nutrislice-menu", {
 					}
 					listOfItems.push(textToDisplay);
 			  }
-			  //mapOfDays[getWeekDay(data.days[key].date)] = listOfItems;
+			  //mapOfDays[this.getWeekDay(data.days[key].date)] = listOfItems;
 			  mapOfDays[key] = listOfItems;
 		  }
 		}
