@@ -151,6 +151,7 @@ Module.register("MMM-nutrislice-menu", {
 	},
 
 	getWeekDay(dateString) {
+		console.log("getWeekDay: ", dateString);
 		const date = new Date(dateString);
 		var weekday = new Array(7);
 		weekday[0] = "Sunday";
@@ -181,7 +182,7 @@ Module.register("MMM-nutrislice-menu", {
 					listOfItems.push(textToDisplay);
 			  }
 			  //mapOfDays[getWeekDay(data.days[key].date)] = listOfItems;
-			  mapOfDays[data.days[key].date.getDay()] = listOfItems;
+			  mapOfDays[key] = listOfItems;
 		  }
 		}
 		return mapOfDays;
