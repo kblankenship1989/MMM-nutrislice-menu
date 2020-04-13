@@ -119,9 +119,12 @@ Module.register("MMM-nutrislice-menu", {
 			//   }
 				var daylist = [];
 				for (key in Object.keys(this.dataRequest.days)) {
-					daylist.push(this.dataRequest.days[key].date);
+					var dayItem = document.createElement("span");
+					dayItem.innerHTML = this.dataRequest.days[key].date;
+					tableElement.appendChild(dayitem);
+					//daylist.push(this.dataRequest.days[key].date);
 				}
-				tableElement.innerHTML = daylist;
+				//tableElement.innerHTML = daylist;
 			}
 
 			var labelDataRequest = document.createElement("label");
