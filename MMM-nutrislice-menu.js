@@ -39,7 +39,11 @@ Module.register("MMM-nutrislice-menu", {
 	getData: function() {
 		var self = this;
 		//var urlApi = "https://jsonplaceholder.typicode.com/posts/1";
-		var urlApi = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2020/4/12/";
+		//var urlApi = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2020/4/12/";
+		const schoolEndpoint = this.config.schoolEndpoint;
+    	const menuType = "lunch"; //this.config.menuType;
+    	const currentDate = new Date();
+		var urlApi = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
 		console.log("endpoint: ", urlApi);
 		var retry = true;
 
@@ -111,7 +115,7 @@ Module.register("MMM-nutrislice-menu", {
 		if (this.dataNotification) {
 			var wrapperDataNotification = document.createElement("div");
 			// translations  + datanotification
-			wrapperDataNotification.innerHTML =  this.translate("UPDATE") + ": " + this.dataNotification.date + ":" + this.result;
+			wrapperDataNotification.innerHTML =  this.translate("UPDATE") + ": " + this.dataNotification.date;
 			//wrapperDataNotification.innerHTML =  "Data" + ": " + this.result;
 			wrapper.appendChild(wrapperDataNotification);
 		}
@@ -159,13 +163,6 @@ Module.register("MMM-nutrislice-menu", {
 		if(notification === "MMM-nutrislice-menu-NOTIFICATION_TEST") {
 			// set dataNotification
 			this.dataNotification = payload;
-			this.result = "test";
-			this.updateDom();
-		}
-		if(notification === "DATA_REQUEST") {
-			console.log("data received:", payload);
-			this.dataNotification = {date: new Date()};
-			this.result = "Hello World " + payload.start_date;
 			this.updateDom();
 		}
 	},

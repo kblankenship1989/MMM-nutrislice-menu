@@ -18,43 +18,13 @@ module.exports = NodeHelper.create({
 	 * argument notification string - The identifier of the noitication.
 	 * argument payload mixed - The payload of the notification.
 	 */
-	getStats: function (endpoint) {
-		console.log("STAT_RESULT...");
-		// Wait for all promises, then merge data together. Duplicate keys WILL be clobbered.
-		this.requestAsync(endpoint)
-		  .then(function (data) {
-				console.log(data);
-				this.sendSocketNotification("DATA_REQUEST", data);
-				//return data;
-		  })
-		  .catch(function (err) {
-				console.log(err);
-			});
-	},
 
-	// Nice little request wrapper from: https://stackoverflow.com/questions/32828415/how-to-run-multiple-async-functions-then-execute-callback
-	requestAsync: function(url) {
-		return new Promise(function (resolve, reject) {
-			request(url, function (err, res, body) {
-				if (err) { return reject(err); }
-				return resolve(JSON.parse(body));
-			});
-		});
-	},
 
 	socketNotificationReceived: function(notification, payload) {
 		if (notification === "MMM-nutrislice-menu-NOTIFICATION_TEST") {
 			console.log("Working notification system. Notification:", notification, "payload: ", payload);
 			// Send notification
 			this.sendNotificationTest(this.anotherFunction()); //Is possible send objects :)
-		}
-		if (notification === "DATA_REQUEST") {
-			console.log("DATA URL:", payload);
-			this.getStats(payload);
-			//console.log("data pulled: ");
-			//console.log(data);
-			//this.sendSocketNotification("DATA_REQUEST", data);
-			//this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", this.anotherFunction());
 		}
 	},
 
