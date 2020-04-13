@@ -180,7 +180,8 @@ Module.register("MMM-nutrislice-menu", {
 					}
 					listOfItems.push(textToDisplay);
 			  }
-			  mapOfDays[getWeekDay(data.days[key].date)] = listOfItems;
+			  //mapOfDays[getWeekDay(data.days[key].date)] = listOfItems;
+			  mapOfDays[data.days[key].date.getDay()] = listOfItems;
 		  }
 		}
 		return mapOfDays;
