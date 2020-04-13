@@ -101,14 +101,32 @@ Module.register("MMM-nutrislice-menu", {
 			// check format https://jsonplaceholder.typicode.com/posts/1
 			wrapperDataRequest.innerHTML = this.dataRequest.start_date; //.title;
 
+			var tableElement = document.createElement("table");
+			const mapOfDays = this.getMapOfDays(data);
+			if (Object.keys(mapOfDays).length > 0) {
+			  for (key in Object.keys(mapOfDays)) {
+				this.addValues(key, mapOfDays[key], tableElement);
+				if (i < data.length - 1) {
+					var hr = document.createElement("hr");
+					hr.style = "border-color: #444;"
+					tableElement.appendChild(hr);
+				}
+			  }
+			}
+
 			var labelDataRequest = document.createElement("label");
 			// Use translate function
 			//             this id defined in translations files
-			labelDataRequest.innerHTML = this.translate("TITLE");
+			if (this.config.title) {
+				labelDataRequest.innerHTML = this.config.title;
+			} else {
+				labelDataRequest.innerHTML = this.translate("TITLE");
+			}
 
 
 			wrapper.appendChild(labelDataRequest);
 			wrapper.appendChild(wrapperDataRequest);
+			wrapper.appendChild(tableElement);
 		}
 
 		// Data from helper
@@ -121,6 +139,29 @@ Module.register("MMM-nutrislice-menu", {
 		}
 		return wrapper;
 	},
+
+	getMapOfDays(data) {
+		const mapOfDays = {};
+
+		for (day in data.days || []) {
+		  if (day && day.date && (day.menu_items || []).length) {
+			  var listOfItems = [];
+			  for (item in day.menu_items) {
+					var textToDispaly = "";
+					if (item.text) {
+				  textToDispaly += item.text;
+					}
+					if (item.food && item.food.name) {
+				  textToDispaly += item.food.name;
+					}
+					listOfItems.push(textToDispaly);
+			  }
+			  mapOfDays[getWeekDay(day.date)] = listOfItems;
+		  }
+		}
+
+		return mapOfDays;
+	  },
 
 	getScripts: function() {
 		return [];
