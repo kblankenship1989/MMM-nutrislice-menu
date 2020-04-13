@@ -95,7 +95,7 @@ Module.register("MMM-nutrislice-menu", {
 		if (this.dataRequest) {
 			var wrapperDataRequest = document.createElement("div");
 			// check format https://jsonplaceholder.typicode.com/posts/1
-			wrapperDataRequest.innerHTML = this.dataRequest.title;
+			wrapperDataRequest.innerHTML = this.dataRequest.start_date; //.title;
 
 			var labelDataRequest = document.createElement("label");
 			// Use translate function
