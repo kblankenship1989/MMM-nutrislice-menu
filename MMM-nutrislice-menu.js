@@ -106,6 +106,7 @@ Module.register("MMM-nutrislice-menu", {
 			//var tableElement = document.createElement("table");
 			var tableElement = document.createElement("div");
 			const mapOfDays = this.getMapOfDays(this.dataRequest);
+			console.log(mapOfDays);
 			//if (Object.keys(mapOfDays).length > 0) {
 			if ((this.dataRequest.days || []).length > 0) {
 			//   for (key in Object.keys(mapOfDays)) {
@@ -152,23 +153,23 @@ Module.register("MMM-nutrislice-menu", {
 	getMapOfDays(data) {
 		const mapOfDays = {};
 
-		for (day in data.days || []) {
-		  if (day && day.date && (day.menu_items || []).length) {
+		//for (day in data.days || []) {
+		for (key in Object.keys(data.days)) {
+		  if (data.days[key] && data.days[key].date && (data.days[key].menu_items || []).length) {
 			  var listOfItems = [];
-			  for (item in day.menu_items) {
-					var textToDispaly = "";
+			  for (item in data.days[key].menu_items) {
+					var textToDisplay = "";
 					if (item.text) {
-				  textToDispaly += item.text;
+				  textToDisplay += item.text;
 					}
 					if (item.food && item.food.name) {
-				  textToDispaly += item.food.name;
+				  textToDisplay += item.food.name;
 					}
-					listOfItems.push(textToDispaly);
+					listOfItems.push(textToDisplay);
 			  }
-			  mapOfDays[getWeekDay(day.date)] = listOfItems;
+			  mapOfDays[getWeekDay(data.days[key].date)] = listOfItems;
 		  }
 		}
-		console.log(mapOfDays);
 		return mapOfDays;
 	  },
 
