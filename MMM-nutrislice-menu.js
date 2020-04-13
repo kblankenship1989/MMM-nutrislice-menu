@@ -10,7 +10,9 @@
 Module.register("MMM-nutrislice-menu", {
 	defaults: {
 		updateInterval: 60000,
-		retryDelay: 5000
+		retryDelay: 5000,
+		title: "Menu",
+		menuType: "lunch"
 	},
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
@@ -101,17 +103,22 @@ Module.register("MMM-nutrislice-menu", {
 			// check format https://jsonplaceholder.typicode.com/posts/1
 			wrapperDataRequest.innerHTML = this.dataRequest.start_date; //.title;
 
-			var tableElement = document.createElement("table");
-			const mapOfDays = this.getMapOfDays(this.dataRequest);
-			if (Object.keys(mapOfDays).length > 0) {
-			  for (key in Object.keys(mapOfDays)) {
-				this.addValues(key, mapOfDays[key], tableElement);
-				if (i < data.length - 1) {
-					var hr = document.createElement("hr");
-					hr.style = "border-color: #444;"
-					tableElement.appendChild(hr);
+			//var tableElement = document.createElement("table");
+			var tableElement = document.createElement("div");
+			//const mapOfDays = this.getMapOfDays(this.dataRequest);
+			//if (Object.keys(mapOfDays).length > 0) {
+			if ((this.dataRequest.days || []).length > 0) {
+			//   for (key in Object.keys(mapOfDays)) {
+			// 	this.addValues(key, mapOfDays[key], tableElement);
+			// 	if (i < data.length - 1) {
+			// 		var hr = document.createElement("hr");
+			// 		hr.style = "border-color: #444;"
+			// 		tableElement.appendChild(hr);
+			// 	}
+			//   }
+				for (day in this.dataRequest.days) {
+					tableElement.appendChild(day.date);
 				}
-			  }
 			}
 
 			var labelDataRequest = document.createElement("label");
