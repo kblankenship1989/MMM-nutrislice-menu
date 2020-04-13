@@ -102,7 +102,7 @@ Module.register("MMM-nutrislice-menu", {
 			wrapperDataRequest.innerHTML = this.dataRequest.start_date; //.title;
 
 			var tableElement = document.createElement("table");
-			const mapOfDays = this.getMapOfDays(data);
+			const mapOfDays = this.getMapOfDays(this.dataRequest);
 			if (Object.keys(mapOfDays).length > 0) {
 			  for (key in Object.keys(mapOfDays)) {
 				this.addValues(key, mapOfDays[key], tableElement);
