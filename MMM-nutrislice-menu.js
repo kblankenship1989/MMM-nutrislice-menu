@@ -135,12 +135,13 @@ Module.register("MMM-nutrislice-menu", {
 					dayItem.innerHTML = day;
 					tableElement.appendChild(dayItem);
 					tableElement.appendChild(document.createElement("br"));
-					// for (item in mapOfDays["Monday"]) {
+					mapOfDays[day].forEach(function (item) {
+						console.log(item);
 					// 	var foodItem = document.createElement("span");
 					// 	foodItem.innerHTML = item;
 					// 	tableElement.appendChild(foodItem);
 					// 	tableElement.appendChild(document.createElement("br"));
-					// }
+					 })
 				})
 			}
 
@@ -169,7 +170,7 @@ Module.register("MMM-nutrislice-menu", {
 		weekday[4] = "Thursday";
 		weekday[5] = "Friday";
 		weekday[6] = "Saturday";
-		return weekday[date.getDay()];
+		return weekday[date.getDay()] + dateString;
 	},
 
 	getMapOfDays(data) {
