@@ -136,11 +136,11 @@ Module.register("MMM-nutrislice-menu", {
 					tableElement.appendChild(dayItem);
 					tableElement.appendChild(document.createElement("br"));
 					mapOfDays[day].forEach(function (item) {
-						console.log(item);
-					// 	var foodItem = document.createElement("span");
-					// 	foodItem.innerHTML = item;
-					// 	tableElement.appendChild(foodItem);
-					// 	tableElement.appendChild(document.createElement("br"));
+					//	console.log(item);
+					 	var foodItem = document.createElement("span");
+					 	foodItem.innerHTML = item;
+					 	tableElement.appendChild(foodItem);
+					 	tableElement.appendChild(document.createElement("br"));
 					 })
 				})
 			}
@@ -163,14 +163,14 @@ Module.register("MMM-nutrislice-menu", {
 		//console.log("getWeekDay: ", dateString);
 		const date = new Date(dateString);
 		var weekday = new Array(7);
-		weekday[0] = "Sunday";
-		weekday[1] = "Monday";
-		weekday[2] = "Tuesday";
-		weekday[3] = "Wednesday";
-		weekday[4] = "Thursday";
-		weekday[5] = "Friday";
-		weekday[6] = "Saturday";
-		return weekday[date.getDay()] + dateString;
+		weekday[6] = "Sunday";
+		weekday[0] = "Monday";
+		weekday[1] = "Tuesday";
+		weekday[2] = "Wednesday";
+		weekday[3] = "Thursday";
+		weekday[4] = "Friday";
+		weekday[5] = "Saturday";
+		return weekday[date.getDay()] + " " + dateString;
 	},
 
 	getMapOfDays(data) {
