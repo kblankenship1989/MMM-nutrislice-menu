@@ -130,15 +130,16 @@ Module.register("MMM-nutrislice-menu", {
 				// }
 				for (key in Object.keys(mapOfDays)) {
 					var dayItem = document.createElement("span");
+					console.log("MapOfDay key: ", key)
 					dayItem.innerHTML = key;
 					tableElement.appendChild(dayItem);
 					tableElement.appendChild(document.createElement("br"));
-					for (item in mapOfDays[key]) {
-						var foodItem = document.createElement("span");
-						foodItem.innerHTML = item;
-						tableElement.appendChild(foodItem);
-						tableElement.appendChild(document.createElement("br"));
-					}
+					// for (item in mapOfDays[key]) {
+					// 	var foodItem = document.createElement("span");
+					// 	foodItem.innerHTML = item;
+					// 	tableElement.appendChild(foodItem);
+					// 	tableElement.appendChild(document.createElement("br"));
+					// }
 					//daylist.push(this.dataRequest.days[key].date);
 				}
 			}
