@@ -137,7 +137,7 @@ Module.register("MMM-nutrislice-menu", {
 					tableElement.appendChild(dayItem);
 					tableElement.appendChild(document.createElement("br"));
 					var itemCount = 0;
-					var itemLimit = this.config.itemLimit;
+					var itemLimit = 5; //this.config.itemLimit;
 					console.log("itemLimit: ", itemLimit);
 					mapOfDays[day].forEach(function (item) {
 						console.log(itemCount, item);
