@@ -97,7 +97,14 @@ Module.register("MMM-nutrislice-menu", {
 
 		// create element wrapper for show into the module
 		var wrapper = document.createElement("div");
+		wrapper.className = "dimmed small";
 		// If this.dataRequest is not empty
+
+		var statElement = document.createElement("header");
+		var title = this.config.title;
+		statElement.innerHTML = title;
+		wrapper.appendChild(statElement);
+
 		if (this.dataRequest) {
 			var wrapperDataRequest = document.createElement("div");
 			// check format https://jsonplaceholder.typicode.com/posts/1
@@ -128,17 +135,17 @@ Module.register("MMM-nutrislice-menu", {
 				//tableElement.innerHTML = daylist;
 			}
 
-			var labelDataRequest = document.createElement("label");
-			// Use translate function
-			//             this id defined in translations files
-			if (this.config.title) {
-				labelDataRequest.innerHTML = this.config.title;
-			} else {
-				labelDataRequest.innerHTML = this.translate("TITLE");
-			}
+			// var labelDataRequest = document.createElement("label");
+			// // Use translate function
+			// //             this id defined in translations files
+			// if (this.config.title) {
+			// 	labelDataRequest.innerHTML = this.config.title;
+			// } else {
+			// 	labelDataRequest.innerHTML = this.translate("TITLE");
+			// }
 
 
-			wrapper.appendChild(labelDataRequest);
+			//wrapper.appendChild(labelDataRequest);
 			wrapper.appendChild(wrapperDataRequest);
 			wrapper.appendChild(tableElement);
 		}
@@ -187,8 +194,8 @@ Module.register("MMM-nutrislice-menu", {
 					}
 					listOfItems.push(textToDisplay);
 			  }
-			  //mapOfDays[this.getWeekDay(data.days[key].date)] = listOfItems;
-			  mapOfDays[key] = listOfItems;
+			  mapOfDays[this.getWeekDay(data.days[key].date)] = listOfItems;
+			  //mapOfDays[key] = listOfItems;
 		  }
 		}
 		return mapOfDays;
