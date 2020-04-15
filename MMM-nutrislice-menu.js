@@ -14,7 +14,7 @@ Module.register("MMM-nutrislice-menu", {
 		title: "Menu",
 		menuType: "lunch",
 		itemLimit: 5,
-		showPast = false
+		showPast: false
 	},
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
@@ -193,7 +193,7 @@ Module.register("MMM-nutrislice-menu", {
 		for (key in Object.keys(data.days)) {
 		  var day = data.days[key];
 		  var date = new Date(day.date);
-		  if (day && day.date && (day.menu_items || []).length) && (date >= today || showPast) {
+		  if (day && day.date && (day.menu_items || []).length && (date >= today || showPast)) {
 			  var listOfItems = [];
 			  for (itemKey in Object.keys(day.menu_items)) {
 				  	var item = day.menu_items[itemKey];
