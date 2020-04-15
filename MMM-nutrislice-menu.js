@@ -13,7 +13,7 @@ Module.register("MMM-nutrislice-menu", {
 		retryDelay: 5000,
 		title: "Menu",
 		menuType: "lunch",
-		itemLimit: 5
+		itemLimit: 0
 	},
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
@@ -138,7 +138,7 @@ Module.register("MMM-nutrislice-menu", {
 					tableElement.appendChild(document.createElement("br"));
 					itemCount = 0;
 					mapOfDays[day].forEach(function (item) {
-					//	console.log(item);
+						console.log(itemCount, item);
 						if (itemCount <= this.config.itemLimit || this.config.itemLimit == 0) {
 					 		var foodItem = document.createElement("span");
 					 		foodItem.innerHTML = item;
