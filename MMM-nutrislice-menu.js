@@ -13,7 +13,8 @@ Module.register("MMM-nutrislice-menu", {
 		retryDelay: 5000,
 		title: "Menu",
 		menuType: "lunch",
-		itemLimit: 5
+		itemLimit: 5,
+		showPast = false
 	},
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
@@ -137,11 +138,12 @@ Module.register("MMM-nutrislice-menu", {
 					tableElement.appendChild(dayItem);
 					tableElement.appendChild(document.createElement("br"));
 					var itemCount = 0;
-					var itemLimit = 5; //this.config.itemLimit;
+					var itemLimit = this.config.itemLimit;
 					console.log("itemLimit: ", itemLimit);
+					itemLimit = 5;
 					mapOfDays[day].forEach(function (item) {
-						console.log(itemCount, item);
-						if (itemCount <= itemLimit || itemLimit == 0) {
+						//console.log(itemCount, item);
+						if (itemCount < itemLimit || itemLimit == 0) {
 					 		var foodItem = document.createElement("span");
 					 		foodItem.innerHTML = item;
 					 		tableElement.appendChild(foodItem);
@@ -184,9 +186,14 @@ Module.register("MMM-nutrislice-menu", {
 		const mapOfDays = {};
 
 		//for (day in data.days || []) {
+		today = new Date();
+		var showPast = this.config.showPast;
+		console.log("showPast: ", showPast);
+		showPast = false;
 		for (key in Object.keys(data.days)) {
 		  var day = data.days[key];
-		  if (day && day.date && (day.menu_items || []).length) {
+		  var date = new Date(day.date);
+		  if (day && day.date && (day.menu_items || []).length) && (date >= today || showPast) {
 			  var listOfItems = [];
 			  for (itemKey in Object.keys(day.menu_items)) {
 				  	var item = day.menu_items[itemKey];
