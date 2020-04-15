@@ -187,9 +187,9 @@ Module.register("MMM-nutrislice-menu", {
 
 		//for (day in data.days || []) {
 		today = new Date();
+		today.setDate(today.getDate()-1);
 		var showPast = this.config.showPast;
 		console.log("showPast: ", showPast);
-		showPast = false;
 		for (key in Object.keys(data.days)) {
 		  var day = data.days[key];
 		  var date = new Date(day.date);
