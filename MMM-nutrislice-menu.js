@@ -106,9 +106,6 @@ Module.register("MMM-nutrislice-menu", {
 		wrapper.appendChild(statElement);
 
 		if (this.dataRequest) {
-			var wrapperDataRequest = document.createElement("div");
-			// check format https://jsonplaceholder.typicode.com/posts/1
-			wrapperDataRequest.innerHTML = this.dataRequest.start_date; //.title;
 
 			//var tableElement = document.createElement("table");
 			var tableElement = document.createElement("div");
@@ -124,29 +121,28 @@ Module.register("MMM-nutrislice-menu", {
 			// 		tableElement.appendChild(hr);
 			// 	}
 			//   }
-				var daylist = [];
-				for (key in Object.keys(this.dataRequest.days)) {
+				// for (key in Object.keys(this.dataRequest.days)) {
+				// 	var dayItem = document.createElement("span");
+				// 	dayItem.innerHTML = this.dataRequest.days[key].date;
+				// 	tableElement.appendChild(dayItem);
+				// 	tableElement.appendChild(document.createElement("br"));
+				// 	//daylist.push(this.dataRequest.days[key].date);
+				// }
+				for (key in Object.keys(mapOfDays)) {
 					var dayItem = document.createElement("span");
-					dayItem.innerHTML = this.dataRequest.days[key].date;
+					dayItem.innerHTML = key;
 					tableElement.appendChild(dayItem);
 					tableElement.appendChild(document.createElement("br"));
+					for (item in mapOfDays[key]) {
+						var foodItem = document.createElement("span");
+						foodItem.innerHTML = item;
+						tableElement.appendChild(foodItem);
+						tableElement.appendChild(document.createElement("br"));
+					}
 					//daylist.push(this.dataRequest.days[key].date);
 				}
-				//tableElement.innerHTML = daylist;
 			}
 
-			// var labelDataRequest = document.createElement("label");
-			// // Use translate function
-			// //             this id defined in translations files
-			// if (this.config.title) {
-			// 	labelDataRequest.innerHTML = this.config.title;
-			// } else {
-			// 	labelDataRequest.innerHTML = this.translate("TITLE");
-			// }
-
-
-			//wrapper.appendChild(labelDataRequest);
-			wrapper.appendChild(wrapperDataRequest);
 			wrapper.appendChild(tableElement);
 		}
 
