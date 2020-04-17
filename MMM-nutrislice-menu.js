@@ -142,7 +142,6 @@ Module.register("MMM-nutrislice-menu", {
 					tableCell.appendChild(dayItem);
 					tableCell.appendChild(document.createElement("br"));
 					var itemCount = 0;
-					itemLimit = 0;
 					mapOfDays[day].foodList.forEach(function (item) {
 						//console.log(itemCount, item);
 						if (itemCount < itemLimit || itemLimit == 0) {
