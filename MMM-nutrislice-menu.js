@@ -246,7 +246,7 @@ Module.register("MMM-nutrislice-menu", {
 		// the data if load
 		// send notification to helper
 		const schoolEndpoint = this.config.schoolEndpoint;
-		const menuType = "lunch"; //this.config.menuType;
+		const menuType = this.config.menuType;
 		const currentDate = new Date();
 		const endpoint = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
 		console.log(endpoint);
