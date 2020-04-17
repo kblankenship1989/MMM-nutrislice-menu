@@ -135,14 +135,14 @@ Module.register("MMM-nutrislice-menu", {
 				var tableRow = document.createElement("tr");
 				Object.keys(mapOfDays).forEach(function (day) {
 					var tableCell = document.createElement("td");
-					var dayItem = document.createElement("span");
+					var dayItem = document.createElement("b");
 					dayItem.innerHTML = day;
 					tableCell.appendChild(dayItem);
 					tableCell.appendChild(document.createElement("br"));
 					var itemCount = 0;
 					var itemLimit = this.config.itemLimit;
 					console.log("itemLimit: ", itemLimit);
-					itemLimit = 5;
+					itemLimit = 0;
 					mapOfDays[day].forEach(function (item) {
 						//console.log(itemCount, item);
 						if (itemCount < itemLimit || itemLimit == 0) {
@@ -183,7 +183,7 @@ Module.register("MMM-nutrislice-menu", {
 		weekday[3] = "Thursday";
 		weekday[4] = "Friday";
 		weekday[5] = "Saturday";
-		return weekday[date.getDay()] + " " + dateString;
+		return weekday[date.getDay()];
 	},
 
 	getMapOfDays(data) {
