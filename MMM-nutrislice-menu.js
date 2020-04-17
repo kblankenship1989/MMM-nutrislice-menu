@@ -14,7 +14,7 @@ Module.register("MMM-nutrislice-menu", {
 		title: "Menu",
 		menuType: "lunch",
 		itemLimit: 5,
-		showPast: false
+		showPast: true
 	},
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
@@ -109,8 +109,8 @@ Module.register("MMM-nutrislice-menu", {
 
 		if (this.dataRequest) {
 
-			//var tableElement = document.createElement("table");
-			var tableElement = document.createElement("div");
+			var tableElement = document.createElement("table");
+			//var tableElement = document.createElement("div");
 			const mapOfDays = this.getMapOfDays(this.dataRequest);
 			console.log(mapOfDays);
 			//if (Object.keys(mapOfDays).length > 0) {
@@ -132,11 +132,13 @@ Module.register("MMM-nutrislice-menu", {
 				// }
 				console.log("MapOfDay key: ", Object.keys(mapOfDays))
 				//for (key in Object.keys(mapOfDays)) {
+				var tableRow = document.createElement("tr");
 				Object.keys(mapOfDays).forEach(function (day) {
+					var tableCell = document.createElement("td");
 					var dayItem = document.createElement("span");
 					dayItem.innerHTML = day;
-					tableElement.appendChild(dayItem);
-					tableElement.appendChild(document.createElement("br"));
+					tableCell.appendChild(dayItem);
+					tableCell.appendChild(document.createElement("br"));
 					var itemCount = 0;
 					var itemLimit = this.config.itemLimit;
 					console.log("itemLimit: ", itemLimit);
@@ -146,12 +148,14 @@ Module.register("MMM-nutrislice-menu", {
 						if (itemCount < itemLimit || itemLimit == 0) {
 					 		var foodItem = document.createElement("span");
 					 		foodItem.innerHTML = item;
-					 		tableElement.appendChild(foodItem);
-							tableElement.appendChild(document.createElement("br"));
+					 		tableCell.appendChild(foodItem);
+							tableCell.appendChild(document.createElement("br"));
 							itemCount++;
 						}
 					 })
+					tableRow.appendChild(tableCell);
 				})
+				tableElement.appendChild(tableRow);
 			}
 
 			wrapper.appendChild(tableElement);
