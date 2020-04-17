@@ -133,6 +133,7 @@ Module.register("MMM-nutrislice-menu", {
 				console.log("MapOfDay key: ", Object.keys(mapOfDays))
 				//for (key in Object.keys(mapOfDays)) {
 				var tableRow = document.createElement("tr");
+
 				Object.keys(mapOfDays).forEach(function (day) {
 					var tableCell = document.createElement("td");
 					var dayItem = document.createElement("b");
@@ -142,8 +143,9 @@ Module.register("MMM-nutrislice-menu", {
 					var itemCount = 0;
 					var itemLimit = this.config.itemLimit;
 					console.log("itemLimit: ", itemLimit);
+					console.log("config: ", this.config);
 					itemLimit = 0;
-					mapOfDays[day].forEach(function (item) {
+					mapOfDays[day].foodList.forEach(function (item) {
 						//console.log(itemCount, item);
 						if (itemCount < itemLimit || itemLimit == 0) {
 					 		var foodItem = document.createElement("span");
@@ -198,19 +200,21 @@ Module.register("MMM-nutrislice-menu", {
 		  var day = data.days[key];
 		  var date = new Date(day.date);
 		  if (day && day.date && (day.menu_items || []).length && (date >= today || showPast)) {
-			  var listOfItems = [];
+			  var listOfFood = [];
+			  var day ={};
 			  for (itemKey in Object.keys(day.menu_items)) {
 				  	var item = day.menu_items[itemKey];
 					var textToDisplay = "";
-					if (item.text) {
-				  textToDisplay += item.text;
+					if (item.text && item.text.startsWith("Day") ) {
+				  		day["activityDay"] = item.text;
 					}
 					if (item.food && item.food.name) {
-				  textToDisplay += item.food.name;
+				  		textToDisplay += item.food.name;
 					}
-					listOfItems.push(textToDisplay);
+					listOfFood.push(textToDisplay);
 			  }
-			  mapOfDays[this.getWeekDay(data.days[key].date)] = listOfItems;
+			  day["foodList"] = listOfFood;
+			  mapOfDays[this.getWeekDay(data.days[key].date)] = day;
 			  //mapOfDays[key] = listOfItems;
 		  }
 		}
