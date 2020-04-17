@@ -201,20 +201,18 @@ Module.register("MMM-nutrislice-menu", {
 		  var date = new Date(day.date);
 		  if (day && day.date && (day.menu_items || []).length && (date >= today || showPast)) {
 			  var listOfFood = [];
-			  var day ={};
+			  var dayObj ={};
 			  for (itemKey in Object.keys(day.menu_items)) {
 				  	var item = day.menu_items[itemKey];
-					var textToDisplay = "";
 					if (item.text && item.text.startsWith("Day") ) {
-				  		day["activityDay"] = item.text;
+						dayObj["activityDay"] = item.text;
 					}
 					if (item.food && item.food.name) {
-				  		textToDisplay += item.food.name;
+						listOfFood.push(item.food.name);
 					}
-					listOfFood.push(textToDisplay);
 			  }
-			  day["foodList"] = listOfFood;
-			  mapOfDays[this.getWeekDay(data.days[key].date)] = day;
+			  dayObj["foodList"] = listOfFood;
+			  mapOfDays[this.getWeekDay(data.days[key].date)] = dayObj;
 			  //mapOfDays[key] = listOfItems;
 		  }
 		}
