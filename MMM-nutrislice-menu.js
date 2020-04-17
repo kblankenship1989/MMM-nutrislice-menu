@@ -19,7 +19,7 @@ Module.register("MMM-nutrislice-menu", {
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
 
-	start: function() {
+	start: function () {
 		var self = this;
 		var dataRequest = null;
 		var dataNotification = null;
@@ -29,7 +29,7 @@ Module.register("MMM-nutrislice-menu", {
 
 		// Schedule update timer.
 		this.getData();
-		setInterval(function() {
+		setInterval(function () {
 			self.updateDom();
 		}, this.config.updateInterval);
 	},
@@ -40,20 +40,20 @@ Module.register("MMM-nutrislice-menu", {
 	 * get a URL request
 	 *
 	 */
-	getData: function() {
+	getData: function () {
 		var self = this;
 		//var urlApi = "https://jsonplaceholder.typicode.com/posts/1";
 		//var urlApi = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2020/4/12/";
 		const schoolEndpoint = this.config.schoolEndpoint;
-    	const menuType = "lunch"; //this.config.menuType;
-    	const currentDate = new Date();
+		const menuType = "lunch"; //this.config.menuType;
+		const currentDate = new Date();
 		var urlApi = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
 		console.log("endpoint: ", urlApi);
 		var retry = true;
 
 		var dataRequest = new XMLHttpRequest();
 		dataRequest.open("GET", urlApi, true);
-		dataRequest.onreadystatechange = function() {
+		dataRequest.onreadystatechange = function () {
 			console.log(this.readyState);
 			if (this.readyState === 4) {
 				console.log(this.status);
@@ -82,19 +82,19 @@ Module.register("MMM-nutrislice-menu", {
 	 * argument delay number - Milliseconds before next update.
 	 *  If empty, this.config.updateInterval is used.
 	 */
-	scheduleUpdate: function(delay) {
+	scheduleUpdate: function (delay) {
 		var nextLoad = this.config.updateInterval;
 		if (typeof delay !== "undefined" && delay >= 0) {
 			nextLoad = delay;
 		}
-		nextLoad = nextLoad ;
+		nextLoad = nextLoad;
 		var self = this;
-		setTimeout(function() {
+		setTimeout(function () {
 			self.getData();
 		}, nextLoad);
 	},
 
-	getDom: function() {
+	getDom: function () {
 		var self = this;
 
 		// create element wrapper for show into the module
@@ -115,14 +115,14 @@ Module.register("MMM-nutrislice-menu", {
 			console.log(mapOfDays);
 			//if (Object.keys(mapOfDays).length > 0) {
 			if ((this.dataRequest.days || []).length > 0) {
-			//   for (key in Object.keys(mapOfDays)) {
-			// 	this.addValues(key, mapOfDays[key], tableElement);
-			// 	if (i < data.length - 1) {
-			// 		var hr = document.createElement("hr");
-			// 		hr.style = "border-color: #444;"
-			// 		tableElement.appendChild(hr);
-			// 	}
-			//   }
+				//   for (key in Object.keys(mapOfDays)) {
+				// 	this.addValues(key, mapOfDays[key], tableElement);
+				// 	if (i < data.length - 1) {
+				// 		var hr = document.createElement("hr");
+				// 		hr.style = "border-color: #444;"
+				// 		tableElement.appendChild(hr);
+				// 	}
+				//   }
 				// for (key in Object.keys(this.dataRequest.days)) {
 				// 	var dayItem = document.createElement("span");
 				// 	dayItem.innerHTML = this.dataRequest.days[key].date;
@@ -133,6 +133,8 @@ Module.register("MMM-nutrislice-menu", {
 				console.log("MapOfDay key: ", Object.keys(mapOfDays))
 				//for (key in Object.keys(mapOfDays)) {
 				var tableRow = document.createElement("tr");
+
+				console.log("config out of forEach:", this.config);
 
 				Object.keys(mapOfDays).forEach(function (day) {
 					var tableCell = document.createElement("td");
@@ -148,13 +150,13 @@ Module.register("MMM-nutrislice-menu", {
 					mapOfDays[day].foodList.forEach(function (item) {
 						//console.log(itemCount, item);
 						if (itemCount < itemLimit || itemLimit == 0) {
-					 		var foodItem = document.createElement("span");
-					 		foodItem.innerHTML = item;
-					 		tableCell.appendChild(foodItem);
+							var foodItem = document.createElement("span");
+							foodItem.innerHTML = item;
+							tableCell.appendChild(foodItem);
 							tableCell.appendChild(document.createElement("br"));
 							itemCount++;
 						}
-					 })
+					})
 					tableRow.appendChild(tableCell);
 				})
 				tableElement.appendChild(tableRow);
@@ -167,7 +169,7 @@ Module.register("MMM-nutrislice-menu", {
 		if (this.dataNotification) {
 			var wrapperDataNotification = document.createElement("div");
 			// translations  + datanotification
-			wrapperDataNotification.innerHTML =  this.translate("UPDATE") + ": " + this.dataNotification.date;
+			wrapperDataNotification.innerHTML = this.translate("UPDATE") + ": " + this.dataNotification.date;
 			//wrapperDataNotification.innerHTML =  "Data" + ": " + this.result;
 			wrapper.appendChild(wrapperDataNotification);
 		}
@@ -193,33 +195,33 @@ Module.register("MMM-nutrislice-menu", {
 
 		//for (day in data.days || []) {
 		today = new Date();
-		today.setDate(today.getDate()-1);
+		today.setDate(today.getDate() - 1);
 		var showPast = this.config.showPast;
 		console.log("showPast: ", showPast);
 		for (key in Object.keys(data.days)) {
-		  var day = data.days[key];
-		  var date = new Date(day.date);
-		  if (day && day.date && (day.menu_items || []).length && (date >= today || showPast)) {
-			  var listOfFood = [];
-			  var dayObj ={};
-			  for (itemKey in Object.keys(day.menu_items)) {
-				  	var item = day.menu_items[itemKey];
-					if (item.text && item.text.startsWith("Day") ) {
+			var day = data.days[key];
+			var date = new Date(day.date);
+			if (day && day.date && (day.menu_items || []).length && (date >= today || showPast)) {
+				var listOfFood = [];
+				var dayObj = {};
+				for (itemKey in Object.keys(day.menu_items)) {
+					var item = day.menu_items[itemKey];
+					if (item.text && item.text.startsWith("Day")) {
 						dayObj["activityDay"] = item.text;
 					}
 					if (item.food && item.food.name) {
 						listOfFood.push(item.food.name);
 					}
-			  }
-			  dayObj["foodList"] = listOfFood;
-			  mapOfDays[this.getWeekDay(data.days[key].date)] = dayObj;
-			  //mapOfDays[key] = listOfItems;
-		  }
+				}
+				dayObj["foodList"] = listOfFood;
+				mapOfDays[this.getWeekDay(data.days[key].date)] = dayObj;
+				//mapOfDays[key] = listOfItems;
+			}
 		}
 		return mapOfDays;
-	  },
+	},
 
-	getScripts: function() {
+	getScripts: function () {
 		return [];
 	},
 
@@ -230,7 +232,7 @@ Module.register("MMM-nutrislice-menu", {
 	},
 
 	// Load translations files
-	getTranslations: function() {
+	getTranslations: function () {
 		//FIXME: This can be load a one file javascript definition
 		return {
 			en: "translations/en.json",
@@ -238,17 +240,19 @@ Module.register("MMM-nutrislice-menu", {
 		};
 	},
 
-	processData: function(data) {
+	processData: function (data) {
 		var self = this;
 		this.dataRequest = data;
-		if (this.loaded === false) { self.updateDom(self.config.animationSpeed) ; }
+		if (this.loaded === false) {
+			self.updateDom(self.config.animationSpeed);
+		}
 		this.loaded = true;
 
 		// the data if load
 		// send notification to helper
 		const schoolEndpoint = this.config.schoolEndpoint;
-    	const menuType = "lunch"; //this.config.menuType;
-    	const currentDate = new Date();
+		const menuType = "lunch"; //this.config.menuType;
+		const currentDate = new Date();
 		const endpoint = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
 		console.log(endpoint);
 		this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", data);
@@ -257,7 +261,7 @@ Module.register("MMM-nutrislice-menu", {
 
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
-		if(notification === "MMM-nutrislice-menu-NOTIFICATION_TEST") {
+		if (notification === "MMM-nutrislice-menu-NOTIFICATION_TEST") {
 			// set dataNotification
 			this.dataNotification = payload;
 			this.updateDom();
