@@ -95,7 +95,8 @@ Module.register("MMM-nutrislice-menu", {
 	},
 
 	getDom: function () {
-		var self = this;
+		const itemLimit = this.config.itemLimit;
+		console.log("itemLimit: ", itemLimit);
 
 		// create element wrapper for show into the module
 		var wrapper = document.createElement("div");
@@ -134,8 +135,6 @@ Module.register("MMM-nutrislice-menu", {
 				//for (key in Object.keys(mapOfDays)) {
 				var tableRow = document.createElement("tr");
 
-				console.log("config out of forEach:", this.config);
-
 				Object.keys(mapOfDays).forEach(function (day) {
 					var tableCell = document.createElement("td");
 					var dayItem = document.createElement("b");
@@ -143,9 +142,6 @@ Module.register("MMM-nutrislice-menu", {
 					tableCell.appendChild(dayItem);
 					tableCell.appendChild(document.createElement("br"));
 					var itemCount = 0;
-					var itemLimit = this.config.itemLimit;
-					console.log("itemLimit: ", itemLimit);
-					console.log("config: ", this.config);
 					itemLimit = 0;
 					mapOfDays[day].foodList.forEach(function (item) {
 						//console.log(itemCount, item);
