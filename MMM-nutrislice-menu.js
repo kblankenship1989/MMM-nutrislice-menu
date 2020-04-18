@@ -138,7 +138,7 @@ Module.register("MMM-nutrislice-menu", {
 				Object.keys(mapOfDays).forEach(function (day) {
 					var tableCell = document.createElement("td");
 					var dayItem = document.createElement("b");
-					dayItem.innerHTML = day;
+					dayItem.innerHTML = day + "-" + mapOfDays[day].activityDay;
 					tableCell.appendChild(dayItem);
 					tableCell.appendChild(document.createElement("br"));
 					var itemCount = 0;
