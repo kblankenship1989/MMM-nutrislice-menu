@@ -111,6 +111,7 @@ Module.register("MMM-nutrislice-menu", {
 		if (this.dataRequest) {
 
 			var tableElement = document.createElement("table");
+			tableElement.className = this.config.tableClass;
 			//var tableElement = document.createElement("div");
 			const mapOfDays = this.getMapOfDays(this.dataRequest);
 			console.log(mapOfDays);
@@ -137,11 +138,11 @@ Module.register("MMM-nutrislice-menu", {
 
 				Object.keys(mapOfDays).forEach(function (day) {
 					var tableCell = document.createElement("td");
-					var dayItem = document.createElement("b");
+					var dayItem = document.createElement("u");
 					console.log(mapOfDays[day].activityDay);
 					dayItem.innerHTML = day + "-" + mapOfDays[day].activityDay;
 					tableCell.appendChild(dayItem);
-					tableCell.appendChild(document.createElement("hr"));
+					tableCell.appendChild(document.createElement("br"));
 					var itemCount = 0;
 					mapOfDays[day].foodList.forEach(function (item) {
 						//console.log(itemCount, item);
