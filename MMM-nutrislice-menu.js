@@ -9,7 +9,7 @@
 
 Module.register("MMM-nutrislice-menu", {
 	defaults: {
-		updateInterval: 60000,
+		updateInterval: 3600000,
 		retryDelay: 5000,
 		title: "Menu",
 		menuType: "lunch",
@@ -53,6 +53,7 @@ Module.register("MMM-nutrislice-menu", {
 
 		var dataRequest = new XMLHttpRequest();
 		dataRequest.open("GET", urlApi, true);
+		dataRequest.setRequestHeader("Accept-Language","en-US,en;q=0.9");
 		dataRequest.onreadystatechange = function () {
 			console.log(this.readyState);
 			if (this.readyState === 4) {
@@ -116,7 +117,7 @@ Module.register("MMM-nutrislice-menu", {
 			const mapOfDays = this.getMapOfDays(this.dataRequest);
 			console.log(mapOfDays);
 			//if (Object.keys(mapOfDays).length > 0) {
-			if ((this.dataRequest.days || []).length > 0) {
+			if ((mapOfDays || []).length > 0) {
 				//   for (key in Object.keys(mapOfDays)) {
 				// 	this.addValues(key, mapOfDays[key], tableElement);
 				// 	if (i < data.length - 1) {
@@ -125,13 +126,6 @@ Module.register("MMM-nutrislice-menu", {
 				// 		tableElement.appendChild(hr);
 				// 	}
 				//   }
-				// for (key in Object.keys(this.dataRequest.days)) {
-				// 	var dayItem = document.createElement("span");
-				// 	dayItem.innerHTML = this.dataRequest.days[key].date;
-				// 	tableElement.appendChild(dayItem);
-				// 	tableElement.appendChild(document.createElement("br"));
-				// 	//daylist.push(this.dataRequest.days[key].date);
-				// }
 				console.log("MapOfDay key: ", Object.keys(mapOfDays))
 				//for (key in Object.keys(mapOfDays)) {
 				var tableRow = document.createElement("tr");
@@ -139,7 +133,6 @@ Module.register("MMM-nutrislice-menu", {
 				Object.keys(mapOfDays).forEach(function (day) {
 					var tableCell = document.createElement("td");
 					var dayItem = document.createElement("u");
-					console.log(mapOfDays[day].activityDay);
 					dayItem.innerHTML = day + "-" + mapOfDays[day].activityDay;
 					tableCell.appendChild(dayItem);
 					tableCell.appendChild(document.createElement("br"));
