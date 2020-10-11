@@ -10,7 +10,7 @@
 Module.register("MMM-nutrislice-menu", {
 	defaults: {
 		updateInterval: 3600000,
-		retryDelay: 5000,
+		retryDelay: 60000,
 		title: "Menu",
 		menuType: "lunch",
 		itemLimit: 5,
@@ -52,7 +52,7 @@ Module.register("MMM-nutrislice-menu", {
 		var retry = true;
 
 		var dataRequest = new XMLHttpRequest();
-		dataRequest.open("GET", urlApi, true);
+		dataRequest.open("GET", urlApi, false);
 		dataRequest.setRequestHeader("Accept-Language","en-US,en;q=0.9");
 		dataRequest.onreadystatechange = function () {
 			console.log(this.readyState);
