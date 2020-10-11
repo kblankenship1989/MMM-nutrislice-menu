@@ -52,8 +52,9 @@ Module.register("MMM-nutrislice-menu", {
 		var retry = true;
 
 		var dataRequest = new XMLHttpRequest();
-		dataRequest.open("GET", urlApi, false);
+		dataRequest.open("GET", urlApi, true);
 		dataRequest.setRequestHeader("Accept-Language","en-US,en;q=0.9");
+		dataRequest.setRequestHeader("Access-Control-Allow-Origin", "*");
 		dataRequest.onreadystatechange = function () {
 			console.log(this.readyState);
 			if (this.readyState === 4) {
