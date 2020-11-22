@@ -95,8 +95,8 @@ Module.register("MMM-nutrislice-menu", {
 			tableElement.className = this.config.tableClass;
 			const mapOfDays = this.getMapOfDays(this.dataNotification);
 			console.log("mapOfDays" , mapOfDays);
-			console.log(mapOfDays.length);
-			if ((mapOfDays || []).length > 0) {
+			console.log(Object.keys(mapOfDays).length);
+			if ((Object.keys(mapOfDays) || []).length > 0) {
 				console.log("MapOfDay key: ", Object.keys(mapOfDays))
 				var tableRow = document.createElement("tr");
 
