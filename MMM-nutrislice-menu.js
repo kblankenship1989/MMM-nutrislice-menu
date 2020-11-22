@@ -226,6 +226,10 @@ Module.register("MMM-nutrislice-menu", {
 			console.log(payload)
 			this.dataNotification = payload;
 			this.updateDom();
+		} else if (notification === "STATUSERROR") {
+			// set dataNotification
+			console.log(notification);
+			console.log(payload)
 		}
 	},
 });

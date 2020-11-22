@@ -29,7 +29,7 @@ module.exports = NodeHelper.create({
 		var self = this;
 
 		//var myUrl = this.config.apiBase + this.config.requestURL + '?hafasID=' + this.config.stationID + '&time=' + currentDate;
-		myUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2020/10/12/";
+		myUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2020/10/12/?format=json";
 
 		console.log("data request started console.log from node_helper");
 		Log.info("data request started Log.info from node_helper");
@@ -42,6 +42,8 @@ module.exports = NodeHelper.create({
 			console.log("nutrislice response code: " + response.statusCode);
 			if (!error && response.statusCode == 200) {
 				self.sendSocketNotification("DATA", body);
+			} else if (!error && response.statusCode == 200) {
+				self.sendSocketNotification("STATUSERROR", response.statusCode);
 			}
 		});
 
