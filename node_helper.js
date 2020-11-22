@@ -42,7 +42,7 @@ module.exports = NodeHelper.create({
 			console.log("nutrislice response code: " + response.statusCode);
 			if (!error && response.statusCode == 200) {
 				self.sendSocketNotification("DATA", body);
-			} else if (!error && response.statusCode == 200) {
+			} else {
 				self.sendSocketNotification("STATUSERROR", response.statusCode);
 			}
 		});

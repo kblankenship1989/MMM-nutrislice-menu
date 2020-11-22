@@ -216,19 +216,17 @@ Module.register("MMM-nutrislice-menu", {
 
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
+		console.log(notification);
 		if (notification === "STARTED") {
-			console.log(notification);
 			this.updateDom();
 		}
 		else if (notification === "DATA") {
 			// set dataNotification
-			console.log(notification);
 			console.log(payload)
 			this.dataNotification = payload;
 			this.updateDom();
 		} else if (notification === "STATUSERROR") {
 			// set dataNotification
-			console.log(notification);
 			console.log(payload)
 		}
 	},
