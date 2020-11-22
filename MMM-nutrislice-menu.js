@@ -79,7 +79,7 @@ Module.register("MMM-nutrislice-menu", {
 			wrapper.innerHTML = this.translate("LOADING");
 			return wrapper;
 		}
-		if (!this.dataRequest.length) {
+		if (!this.dataRequest) {
 			wrapper.innerHTML = "No data";
 			return wrapper;
 		}
@@ -216,13 +216,13 @@ Module.register("MMM-nutrislice-menu", {
 
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
-		console.log(notification);
+		//console.log(notification);
 		if (notification === "STARTED") {
 			this.updateDom();
 		}
 		else if (notification === "MMM-nutrislice-menu-NOTIFICATION_TEST") {
 			// set dataNotification
-			//console.log(payload)
+			console.log(payload)
 			this.dataNotification = payload;
 			this.updateDom();
 		}
