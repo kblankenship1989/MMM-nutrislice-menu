@@ -23,7 +23,6 @@ Module.register("MMM-nutrislice-menu", {
 	start: function () {
 		var self = this;
 		Log.info("Starting module: " + this.name);
-		var dataRequest = null;
 		var dataNotification = null;
 
 		//Flag for check if module is loaded
@@ -31,7 +30,7 @@ Module.register("MMM-nutrislice-menu", {
 
 		// Schedule update timer.
 		//this.getData();
-		this.processData();
+		this.sendDataRequest();
 		setInterval(function () {
 			self.updateDom();
 		}, this.config.updateInterval);
@@ -52,7 +51,7 @@ Module.register("MMM-nutrislice-menu", {
 		nextLoad = nextLoad;
 		var self = this;
 		setTimeout(function () {
-			self.processData();
+			self.sendDataRequest();
 		}, nextLoad);
 	},
 
@@ -96,6 +95,7 @@ Module.register("MMM-nutrislice-menu", {
 			tableElement.className = this.config.tableClass;
 			const mapOfDays = this.getMapOfDays(this.dataNotification);
 			console.log("mapOfDays" , mapOfDays);
+			console.log((mapOfDays || []).length);
 			if ((mapOfDays || []).length > 0) {
 				console.log("MapOfDay key: ", Object.keys(mapOfDays))
 				var tableRow = document.createElement("tr");
@@ -126,14 +126,14 @@ Module.register("MMM-nutrislice-menu", {
 			//end Format response to screen
 		}
 
-		// Data from helper
-		if (this.dataNotification) {
-			var wrapperDataNotification = document.createElement("div");
-			// translations  + datanotification
-			wrapperDataNotification.innerHTML = this.translate("UPDATE") + ": " + this.dataNotification.date;
-			//wrapperDataNotification.innerHTML =  "Data" + ": " + this.result;
-			wrapper.appendChild(wrapperDataNotification);
-		}
+
+		var wrapperDataNotification = document.createElement("div");
+		// translations
+		wrapperDataNotification.innerHTML = this.translate("UPDATE") + " : " + new Date();
+		//wrapperDataNotification.innerHTML =  "Data" + ": " + this.result;
+		wrapper.appendChild(wrapperDataNotification);
+
+
 		return wrapper;
 	},
 
@@ -201,7 +201,7 @@ Module.register("MMM-nutrislice-menu", {
 		};
 	},
 
-	processData: function () {
+	sendDataRequest: function () {
 		var self = this;
 		if (this.loaded === false) {
 			self.updateDom(self.config.animationSpeed);
@@ -216,7 +216,6 @@ Module.register("MMM-nutrislice-menu", {
 		const endpoint = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
 		console.log("endpoint: " + endpoint);
 		this.sendSocketNotification("UPDATE", endpoint);
-		//this.sendSocketNotification("DATA_REQUEST", endpoint);
 	},
 
 	// socketNotificationReceived from helper
