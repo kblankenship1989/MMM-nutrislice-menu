@@ -80,6 +80,7 @@ Module.register("MMM-nutrislice-menu", {
 			return wrapper;
 		}
 		if (!this.dataRequest) {
+			console.log("dataRequest: ", this.dataRequest);
 			wrapper.innerHTML = "No data";
 			return wrapper;
 		}
@@ -221,12 +222,10 @@ Module.register("MMM-nutrislice-menu", {
 			this.updateDom();
 		}
 		else if (notification === "DATA") {
-			// set dataNotification
 			console.log(payload)
-			this.dataNotification = payload;
+			this.dataRequest = payload;
 			this.updateDom();
 		} else if (notification === "STATUSERROR") {
-			// set dataNotification
 			console.log(payload)
 		}
 	},

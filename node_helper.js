@@ -32,7 +32,6 @@ module.exports = NodeHelper.create({
 		myUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2020/10/12/?format=json";
 
 		//console.log("data request started console.log from node_helper");
-		//Log.info("data request started Log.info from node_helper");
 
 		request({
 			url: myUrl,
