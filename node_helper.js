@@ -27,18 +27,13 @@ module.exports = NodeHelper.create({
 
 	getData: function(myUrl) {
 		var self = this;
-
-		//var myUrl = this.config.apiBase + this.config.requestURL + '?hafasID=' + this.config.stationID + '&time=' + currentDate;
 		//myUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2020/10/12/?format=json";
-
-		//console.log("data request started console.log from node_helper");
 
 		request({
 			url: myUrl,
 			method: "GET"
 			//headers: { 'RNV_API_TOKEN': this.config.apiKey }
 		}, function (error, response, body) {
-			//console.log("nutrislice response code: " + response.statusCode);
 			if (!error && response.statusCode == 200) {
 				self.sendSocketNotification("DATA", body);
 			} else {
@@ -53,30 +48,11 @@ module.exports = NodeHelper.create({
 	socketNotificationReceived: function(notification, payload) {
 		var self = this;
 		if (notification === "UPDATE" && self.started == false) {
-			//self.config = payload;
 			self.sendSocketNotification("STARTED", true);
 			self.getData(payload);
 			self.started = true;
 		}
 	},
 
-	// Example function send notification test
-	sendNotificationTest: function(payload) {
-		this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", payload);
-	},
 
-	// this you can create extra routes for your module
-	extraRoutes: function() {
-		var self = this;
-		this.expressApp.get("/MMM-nutrislice-menu/extra_route", function(req, res) {
-			// call another function
-			values = self.anotherFunction();
-			res.send(values);
-		});
-	},
-
-	// Test another function
-	anotherFunction: function() {
-		return {date: new Date()};
-	}
 });
