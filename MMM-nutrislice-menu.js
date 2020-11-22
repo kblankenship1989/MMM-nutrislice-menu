@@ -47,7 +47,7 @@ Module.register("MMM-nutrislice-menu", {
 		const schoolEndpoint = this.config.schoolEndpoint;
 		const menuType = "lunch"; //this.config.menuType;
 		const currentDate = new Date();
-		var urlApi = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
+		var urlApi = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
 		console.log("endpoint: ", urlApi);
 		var retry = true;
 
