@@ -7,6 +7,7 @@
 
 var NodeHelper = require("node_helper");
 const request = require("request");
+var moment = require("moment");
 
 module.exports = NodeHelper.create({
 
@@ -19,12 +20,39 @@ module.exports = NodeHelper.create({
 	 * argument payload mixed - The payload of the notification.
 	 */
 
+	start: function() {
+		this.started = false;
+		this.config = null;
+	},
+
+	getData: function(myUrl) {
+		var self = this;
+
+		//var myUrl = this.config.apiBase + this.config.requestURL + '?hafasID=' + this.config.stationID + '&time=' + currentDate;
+		myUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2020/10/12/";
+
+		request({
+			url: myUrl,
+			method: "GET"
+			//headers: { 'RNV_API_TOKEN': this.config.apiKey }
+		}, function (error, response, body) {
+
+			if (!error && response.statusCode == 200) {
+				self.sendSocketNotification("DATA", body);
+			}
+		});
+
+		setTimeout(function() { self.getData(); }, this.config.refreshInterval);
+	},
+
 
 	socketNotificationReceived: function(notification, payload) {
-		if (notification === "MMM-nutrislice-menu-NOTIFICATION_TEST") {
-			console.log("Working notification system. Notification:", notification, "payload: ", payload);
-			// Send notification
-			this.sendNotificationTest(this.anotherFunction()); //Is possible send objects :)
+		var self = this;
+		if (notification === "MMM-nutrislice-menu-NOTIFICATION_TEST" && self.started == false) {
+			self.config = payload;
+			self.sendSocketNotification("STARTED", true);
+			self.getData(payload);
+			self.started = true;
 		}
 	},
 

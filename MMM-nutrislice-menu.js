@@ -28,7 +28,8 @@ Module.register("MMM-nutrislice-menu", {
 		this.loaded = false;
 
 		// Schedule update timer.
-		this.getData();
+		//this.getData();
+		this.processData;
 		setInterval(function () {
 			self.updateDom();
 		}, this.config.updateInterval);
@@ -51,30 +52,30 @@ Module.register("MMM-nutrislice-menu", {
 		console.log("endpoint: ", urlApi);
 		var retry = true;
 
-		var dataRequest = new XMLHttpRequest();
-		dataRequest.open("OPTIONS", urlApi, false);
-		dataRequest.open("GET", urlApi, true);
-		dataRequest.setRequestHeader("Accept-Language","en-US,en;q=0.9");
-		dataRequest.onreadystatechange = function () {
-			console.log(this.readyState);
-			if (this.readyState === 4) {
-				console.log(this.status);
-				if (this.status === 200) {
-					//console.log(this.response)
-					self.processData(JSON.parse(this.response));
-				} else if (this.status === 401) {
-					self.updateDom(self.config.animationSpeed);
-					Log.error(self.name, this.status);
-					retry = false;
-				} else {
-					Log.error(self.name, "Could not load data.");
-				}
-				if (retry) {
-					self.scheduleUpdate((self.loaded) ? -1 : self.config.retryDelay);
-				}
-			}
-		};
-		dataRequest.send();
+		// var dataRequest = new XMLHttpRequest();
+		// dataRequest.open("OPTIONS", urlApi, false);
+		// dataRequest.open("GET", urlApi, true);
+		// dataRequest.setRequestHeader("Accept-Language","en-US,en;q=0.9");
+		// dataRequest.onreadystatechange = function () {
+		// 	console.log(this.readyState);
+		// 	if (this.readyState === 4) {
+		// 		console.log(this.status);
+		// 		if (this.status === 200) {
+		// 			//console.log(this.response)
+		// 			self.processData(JSON.parse(this.response));
+		// 		} else if (this.status === 401) {
+		// 			self.updateDom(self.config.animationSpeed);
+		// 			Log.error(self.name, this.status);
+		// 			retry = false;
+		// 		} else {
+		// 			Log.error(self.name, "Could not load data.");
+		// 		}
+		// 		if (retry) {
+		// 			self.scheduleUpdate((self.loaded) ? -1 : self.config.retryDelay);
+		// 		}
+		// 	}
+		// };
+		// dataRequest.send();
 	},
 
 
@@ -114,21 +115,10 @@ Module.register("MMM-nutrislice-menu", {
 
 			var tableElement = document.createElement("table");
 			tableElement.className = this.config.tableClass;
-			//var tableElement = document.createElement("div");
 			const mapOfDays = this.getMapOfDays(this.dataRequest);
 			console.log(mapOfDays);
-			//if (Object.keys(mapOfDays).length > 0) {
 			if ((mapOfDays || []).length > 0) {
-				//   for (key in Object.keys(mapOfDays)) {
-				// 	this.addValues(key, mapOfDays[key], tableElement);
-				// 	if (i < data.length - 1) {
-				// 		var hr = document.createElement("hr");
-				// 		hr.style = "border-color: #444;"
-				// 		tableElement.appendChild(hr);
-				// 	}
-				//   }
 				console.log("MapOfDay key: ", Object.keys(mapOfDays))
-				//for (key in Object.keys(mapOfDays)) {
 				var tableRow = document.createElement("tr");
 
 				Object.keys(mapOfDays).forEach(function (day) {
@@ -246,7 +236,7 @@ Module.register("MMM-nutrislice-menu", {
 		const currentDate = new Date();
 		const endpoint = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
 		console.log(endpoint);
-		this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", data);
+		this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", endpoint);
 		//this.sendSocketNotification("DATA_REQUEST", endpoint);
 	},
 
@@ -254,6 +244,7 @@ Module.register("MMM-nutrislice-menu", {
 	socketNotificationReceived: function (notification, payload) {
 		if (notification === "MMM-nutrislice-menu-NOTIFICATION_TEST") {
 			// set dataNotification
+			console.log(payload)
 			this.dataNotification = payload;
 			this.updateDom();
 		}
