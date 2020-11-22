@@ -210,7 +210,7 @@ Module.register("MMM-nutrislice-menu", {
 		const currentDate = new Date();
 		const endpoint = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
 		console.log("endpoint: " + endpoint);
-		this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", endpoint);
+		this.sendSocketNotification("MMM-nutrislice-menu", endpoint);
 		//this.sendSocketNotification("DATA_REQUEST", endpoint);
 	},
 
@@ -220,7 +220,7 @@ Module.register("MMM-nutrislice-menu", {
 			console.log(notification);
 			this.updateDom();
 		}
-		else if (notification === "MMM-nutrislice-menu-NOTIFICATION_TEST") {
+		else if (notification === "MMM-nutrislice-menu-reply") {
 			// set dataNotification
 			console.log(notification);
 			console.log(payload)

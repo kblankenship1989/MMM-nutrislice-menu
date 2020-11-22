@@ -22,7 +22,7 @@ module.exports = NodeHelper.create({
 
 	start: function() {
 		this.started = false;
-		this.config = null;
+		console.log("====================== Starting node_helper for module [" + this.name + "]");
 	},
 
 	getData: function(myUrl) {
@@ -39,19 +39,19 @@ module.exports = NodeHelper.create({
 			method: "GET"
 			//headers: { 'RNV_API_TOKEN': this.config.apiKey }
 		}, function (error, response, body) {
-
+			console.log("nutrislice response code: " + response.statusCode);
 			if (!error && response.statusCode == 200) {
-				self.sendSocketNotification("DATA", body);
+				self.sendSocketNotification("MMM-nutrislice-menu-reply", body);
 			}
 		});
 
-		setTimeout(function() { self.getData(); }, this.config.refreshInterval);
+		setTimeout(function() { self.getData(); }, this.config.retryDelay);
 	},
 
 
 	socketNotificationReceived: function(notification, payload) {
 		var self = this;
-		if (notification === "MMM-nutrislice-menu-NOTIFICATION_TEST" && self.started == false) {
+		if (notification === "MMM-nutrislice-menu" && self.started == false) {
 			//self.config = payload;
 			self.sendSocketNotification("STARTED", true);
 			self.getData(payload);
