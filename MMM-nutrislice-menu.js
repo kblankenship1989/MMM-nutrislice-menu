@@ -226,7 +226,7 @@ Module.register("MMM-nutrislice-menu", {
 		else if (notification === "DATA") {
 			// set dataNotification
 			console.log(payload)
-			this.dataNotification = payload;
+			this.dataNotification = JSON.parse(payload);
 			this.updateDom();
 		} else if (notification === "STATUSERROR") {
 			// set dataNotification
