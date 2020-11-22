@@ -31,6 +31,9 @@ module.exports = NodeHelper.create({
 		//var myUrl = this.config.apiBase + this.config.requestURL + '?hafasID=' + this.config.stationID + '&time=' + currentDate;
 		myUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2020/10/12/";
 
+		console.log("data request started console.log from node_helper");
+		Log.info("data request started Log.info from node_helper");
+
 		request({
 			url: myUrl,
 			method: "GET"
@@ -49,7 +52,7 @@ module.exports = NodeHelper.create({
 	socketNotificationReceived: function(notification, payload) {
 		var self = this;
 		if (notification === "MMM-nutrislice-menu-NOTIFICATION_TEST" && self.started == false) {
-			self.config = payload;
+			//self.config = payload;
 			self.sendSocketNotification("STARTED", true);
 			self.getData(payload);
 			self.started = true;
