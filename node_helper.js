@@ -41,7 +41,7 @@ module.exports = NodeHelper.create({
 		}, function (error, response, body) {
 			console.log("nutrislice response code: " + response.statusCode);
 			if (!error && response.statusCode == 200) {
-				self.sendSocketNotification("MMM-nutrislice-menu-reply", body);
+				self.sendSocketNotification("DATA", body);
 			}
 		});
 
@@ -51,7 +51,7 @@ module.exports = NodeHelper.create({
 
 	socketNotificationReceived: function(notification, payload) {
 		var self = this;
-		if (notification === "MMM-nutrislice-menu" && self.started == false) {
+		if (notification === "UPDATE" && self.started == false) {
 			//self.config = payload;
 			self.sendSocketNotification("STARTED", true);
 			self.getData(payload);
