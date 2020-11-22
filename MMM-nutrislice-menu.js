@@ -79,18 +79,19 @@ Module.register("MMM-nutrislice-menu", {
 			wrapper.innerHTML = this.translate("LOADING");
 			return wrapper;
 		}
-		if (!this.dataRequest) {
-			console.log("dataRequest: ", this.dataRequest);
+		if (!this.dataNotification) {
+			console.log("dataRequest: ", this.dataNotification);
 			wrapper.innerHTML = "No data";
 			return wrapper;
 		}
 
-		// If this.dataRequest is not empty
-		if (this.dataRequest) {
+		// If this.dataNotification is not empty
+		if (this.dataNotification) {
 			//Format the data to the screen
+			console.log(this.dataNotification);
 			var tableElement = document.createElement("table");
 			tableElement.className = this.config.tableClass;
-			const mapOfDays = this.getMapOfDays(this.dataRequest);
+			const mapOfDays = this.getMapOfDays(this.dataNotification);
 			console.log(mapOfDays);
 			if ((mapOfDays || []).length > 0) {
 				console.log("MapOfDay key: ", Object.keys(mapOfDays))
@@ -155,6 +156,7 @@ Module.register("MMM-nutrislice-menu", {
 		today.setDate(today.getDate() - 1);
 		var showPast = this.config.showPast;
 		console.log("showPast: ", showPast);
+		console.log(data.days);
 		for (key in Object.keys(data.days)) {
 			var day = data.days[key];
 			var date = new Date(day.date);
@@ -222,10 +224,12 @@ Module.register("MMM-nutrislice-menu", {
 			this.updateDom();
 		}
 		else if (notification === "DATA") {
+			// set dataNotification
 			console.log(payload)
-			this.dataRequest = payload;
+			this.dataNotification = payload;
 			this.updateDom();
 		} else if (notification === "STATUSERROR") {
+			// set dataNotification
 			console.log(payload)
 		}
 	},
