@@ -13,6 +13,7 @@ Module.register("MMM-nutrislice-menu", {
 		retryDelay: 60000,
 		title: "Menu",
 		menuType: "lunch",
+		schoolEndpoint: "",
 		itemLimit: 5,
 		showPast: true
 	},
@@ -21,6 +22,7 @@ Module.register("MMM-nutrislice-menu", {
 
 	start: function () {
 		var self = this;
+		Log.info("Starting module: " + this.name);
 		var dataRequest = null;
 		var dataNotification = null;
 
@@ -33,49 +35,6 @@ Module.register("MMM-nutrislice-menu", {
 		setInterval(function () {
 			self.updateDom();
 		}, this.config.updateInterval);
-	},
-
-	/*
-	 * getData
-	 * function example return data and show it in the module wrapper
-	 * get a URL request
-	 *
-	 */
-	getData: function () {
-		var self = this;
-		//var urlApi = "https://jsonplaceholder.typicode.com/posts/1";
-		//var urlApi = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2020/4/12/";
-		const schoolEndpoint = this.config.schoolEndpoint;
-		const menuType = "lunch"; //this.config.menuType;
-		const currentDate = new Date();
-		var urlApi = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
-		console.log("endpoint: ", urlApi);
-		var retry = true;
-
-		// var dataRequest = new XMLHttpRequest();
-		// dataRequest.open("OPTIONS", urlApi, false);
-		// dataRequest.open("GET", urlApi, true);
-		// dataRequest.setRequestHeader("Accept-Language","en-US,en;q=0.9");
-		// dataRequest.onreadystatechange = function () {
-		// 	console.log(this.readyState);
-		// 	if (this.readyState === 4) {
-		// 		console.log(this.status);
-		// 		if (this.status === 200) {
-		// 			//console.log(this.response)
-		// 			self.processData(JSON.parse(this.response));
-		// 		} else if (this.status === 401) {
-		// 			self.updateDom(self.config.animationSpeed);
-		// 			Log.error(self.name, this.status);
-		// 			retry = false;
-		// 		} else {
-		// 			Log.error(self.name, "Could not load data.");
-		// 		}
-		// 		if (retry) {
-		// 			self.scheduleUpdate((self.loaded) ? -1 : self.config.retryDelay);
-		// 		}
-		// 	}
-		// };
-		// dataRequest.send();
 	},
 
 
@@ -93,7 +52,6 @@ Module.register("MMM-nutrislice-menu", {
 		nextLoad = nextLoad;
 		var self = this;
 		setTimeout(function () {
-			self.getData();
 			self.processData();
 		}, nextLoad);
 	},
@@ -105,15 +63,30 @@ Module.register("MMM-nutrislice-menu", {
 		// create element wrapper for show into the module
 		var wrapper = document.createElement("div");
 		wrapper.className = "dimmed small";
-		// If this.dataRequest is not empty
 
+		//make header
 		var statElement = document.createElement("header");
 		var title = this.config.title;
 		statElement.innerHTML = title;
 		wrapper.appendChild(statElement);
 
-		if (this.dataRequest) {
+		if (this.config.schoolEndpoint ===""){
+			wrapper.innerHTML = "No <i>School Endpoint</i> set in config file";
+			return wrapper;
+		}
 
+		if (!this.loaded) {
+			wrapper.innerHTML = this.translate("LOADING");
+			return wrapper;
+		}
+		if (!this.dataRequest.length) {
+			wrapper.innerHTML = "No data";
+			return wrapper;
+		}
+
+		// If this.dataRequest is not empty
+		if (this.dataRequest) {
+			//Format the data to the screen
 			var tableElement = document.createElement("table");
 			tableElement.className = this.config.tableClass;
 			const mapOfDays = this.getMapOfDays(this.dataRequest);
@@ -145,6 +118,7 @@ Module.register("MMM-nutrislice-menu", {
 			}
 
 			wrapper.appendChild(tableElement);
+			//end Format response to screen
 		}
 
 		// Data from helper
@@ -248,7 +222,7 @@ Module.register("MMM-nutrislice-menu", {
 		}
 		else if (notification === "MMM-nutrislice-menu-NOTIFICATION_TEST") {
 			// set dataNotification
-			console.log(payload)
+			//console.log(payload)
 			this.dataNotification = payload;
 			this.updateDom();
 		}
