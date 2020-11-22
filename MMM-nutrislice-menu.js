@@ -70,29 +70,32 @@ Module.register("MMM-nutrislice-menu", {
 		statElement.innerHTML = title;
 		wrapper.appendChild(statElement);
 
+		var messageElement = document.createElement("div");
 		if (this.config.schoolEndpoint ===""){
-			wrapper.innerHTML = "No <i>School Endpoint</i> set in config file";
+			messageElement.innerHTML = "No <i>School Endpoint</i> set in config file";
+			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
 
 		if (!this.loaded) {
-			wrapper.innerHTML = this.translate("LOADING");
+			messageElement.innerHTML = this.translate("LOADING");
+			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
 		if (!this.dataNotification) {
 			console.log("dataRequest: ", this.dataNotification);
-			wrapper.innerHTML = "No data";
+			messageElement.innerHTML = "No data";
+			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
 
 		// If this.dataNotification is not empty
 		if (this.dataNotification) {
 			//Format the data to the screen
-			console.log(this.dataNotification);
 			var tableElement = document.createElement("table");
 			tableElement.className = this.config.tableClass;
 			const mapOfDays = this.getMapOfDays(this.dataNotification);
-			console.log(mapOfDays);
+			console.log("mapOfDays" , mapOfDays);
 			if ((mapOfDays || []).length > 0) {
 				console.log("MapOfDay key: ", Object.keys(mapOfDays))
 				var tableRow = document.createElement("tr");
@@ -156,7 +159,6 @@ Module.register("MMM-nutrislice-menu", {
 		today.setDate(today.getDate() - 1);
 		var showPast = this.config.showPast;
 		console.log("showPast: ", showPast);
-		console.log(typeof data);
 		for (key in Object.keys(data.days)) {
 			var day = data.days[key];
 			var date = new Date(day.date);
@@ -211,7 +213,7 @@ Module.register("MMM-nutrislice-menu", {
 		const schoolEndpoint = this.config.schoolEndpoint;
 		const menuType = this.config.menuType;
 		const currentDate = new Date();
-		const endpoint = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
+		const endpoint = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
 		console.log("endpoint: " + endpoint);
 		this.sendSocketNotification("UPDATE", endpoint);
 		//this.sendSocketNotification("DATA_REQUEST", endpoint);
