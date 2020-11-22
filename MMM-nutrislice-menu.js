@@ -29,7 +29,7 @@ Module.register("MMM-nutrislice-menu", {
 
 		// Schedule update timer.
 		//this.getData();
-		this.processData;
+		this.processData();
 		setInterval(function () {
 			self.updateDom();
 		}, this.config.updateInterval);
@@ -94,6 +94,7 @@ Module.register("MMM-nutrislice-menu", {
 		var self = this;
 		setTimeout(function () {
 			self.getData();
+			self.processData();
 		}, nextLoad);
 	},
 
@@ -221,9 +222,8 @@ Module.register("MMM-nutrislice-menu", {
 		};
 	},
 
-	processData: function (data) {
+	processData: function () {
 		var self = this;
-		this.dataRequest = data;
 		if (this.loaded === false) {
 			self.updateDom(self.config.animationSpeed);
 		}
@@ -235,14 +235,18 @@ Module.register("MMM-nutrislice-menu", {
 		const menuType = this.config.menuType;
 		const currentDate = new Date();
 		const endpoint = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/`;
-		console.log(endpoint);
+		console.log("endpoint: " + endpoint);
 		this.sendSocketNotification("MMM-nutrislice-menu-NOTIFICATION_TEST", endpoint);
 		//this.sendSocketNotification("DATA_REQUEST", endpoint);
 	},
 
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
-		if (notification === "MMM-nutrislice-menu-NOTIFICATION_TEST") {
+		console.log(notification);
+		if (notification === "STARTED") {
+			this.updateDom();
+		}
+		else if (notification === "MMM-nutrislice-menu-NOTIFICATION_TEST") {
 			// set dataNotification
 			console.log(payload)
 			this.dataNotification = payload;
