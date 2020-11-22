@@ -14,7 +14,7 @@ Module.register("MMM-nutrislice-menu", {
 		title: "Menu",
 		menuType: "lunch",
 		schoolEndpoint: "",
-		itemLimit: 5,
+		itemLimit: 0,
 		showPast: true
 	},
 
@@ -82,7 +82,6 @@ Module.register("MMM-nutrislice-menu", {
 			return wrapper;
 		}
 		if (!this.dataNotification) {
-			console.log("dataRequest: ", this.dataNotification);
 			messageElement.innerHTML = "No data";
 			wrapper.appendChild(messageElement);
 			return wrapper;
@@ -95,9 +94,8 @@ Module.register("MMM-nutrislice-menu", {
 			tableElement.className = this.config.tableClass;
 			const mapOfDays = this.getMapOfDays(this.dataNotification);
 			console.log("mapOfDays" , mapOfDays);
-			console.log(Object.keys(mapOfDays).length);
 			if ((Object.keys(mapOfDays) || []).length > 0) {
-				console.log("MapOfDay key: ", Object.keys(mapOfDays))
+				//console.log("MapOfDay key: ", Object.keys(mapOfDays))
 				var tableRow = document.createElement("tr");
 
 				Object.keys(mapOfDays).forEach(function (day) {
@@ -142,7 +140,6 @@ Module.register("MMM-nutrislice-menu", {
 	},
 
 	getWeekDay(dateString) {
-		//console.log("getWeekDay: ", dateString);
 		const date = new Date(dateString);
 		var weekday = new Array(7);
 		weekday[6] = "Sunday";
@@ -230,12 +227,11 @@ Module.register("MMM-nutrislice-menu", {
 		}
 		else if (notification === "DATA") {
 			// set dataNotification
-			console.log(payload)
+			//console.log(payload)
 			this.dataNotification = JSON.parse(payload);
 			this.updateDom();
 		} else if (notification === "STATUSERROR") {
-			// set dataNotification
-			console.log(payload)
+			console.log(payload);
 		}
 	},
 });
