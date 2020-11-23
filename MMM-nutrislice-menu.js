@@ -11,9 +11,8 @@ Module.register("MMM-nutrislice-menu", {
 	defaults: {
 		updateInterval: 3600000,
 		retryDelay: 60000,
-		title: "Menu",
 		menuType: "lunch",
-		schoolEndpoint: "",
+		nutrisliceEndpoint: "",
 		itemLimit: 0,
 		showPast: true
 	},
@@ -63,15 +62,9 @@ Module.register("MMM-nutrislice-menu", {
 		var wrapper = document.createElement("div");
 		wrapper.className = "dimmed small";
 
-		//make header
-		var statElement = document.createElement("header");
-		var title = this.config.title;
-		statElement.innerHTML = title;
-		wrapper.appendChild(statElement);
-
 		var messageElement = document.createElement("div");
-		if (this.config.schoolEndpoint ===""){
-			messageElement.innerHTML = "No <i>School Endpoint</i> set in config file";
+		if (this.config.nutrisliceEndpoint ===""){
+			messageElement.innerHTML = "No <i>nutrislice Endpoint</i> set in config file";
 			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
@@ -211,10 +204,10 @@ Module.register("MMM-nutrislice-menu", {
 
 		// the data if load
 		// send notification to helper
-		const schoolEndpoint = this.config.schoolEndpoint;
+		const nutrisliceEndpoint = this.config.nutrisliceEndpoint;
 		const menuType = this.config.menuType;
 		const currentDate = new Date();
-		const endpoint = `https://${schoolEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
+		const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
 		console.log("endpoint: " + endpoint);
 		this.sendSocketNotification("UPDATE", endpoint);
 	},
