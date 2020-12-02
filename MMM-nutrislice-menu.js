@@ -161,7 +161,7 @@ Module.register("MMM-nutrislice-menu", {
 				var dayObj = {};
 				for (itemKey in Object.keys(day.menu_items)) {
 					var item = day.menu_items[itemKey];
-					if (item.text && item.text.startsWith("Day")) {
+					if (item.text && (item.text.startsWith("Day") || item.text.startsWith("Hybrid"))) {
 						dayObj["activityDay"] = item.text;
 					}
 					if (item.food && item.food.name) {
