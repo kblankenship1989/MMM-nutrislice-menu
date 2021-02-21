@@ -208,6 +208,7 @@ Module.register("MMM-nutrislice-menu", {
 
 
 	sendDataRequest: function (currentWeek) {
+		console.log("currentWeek", currentWeek);
 		var self = this;
 		if (this.loaded === false) {
 			self.updateDom(self.config.animationSpeed);
@@ -233,7 +234,7 @@ Module.register("MMM-nutrislice-menu", {
 
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
-		console.log(notification);
+		//console.log(notification);
 		if (notification === "STARTED") {
 			this.updateDom();
 		}
@@ -241,8 +242,8 @@ Module.register("MMM-nutrislice-menu", {
 			// set dataNotification
 			//console.log(payload)
 			this.dataNotification = JSON.parse(payload);
-			//this.sendDataRequest(false);
-			this.updateDom();
+			this.sendDataRequest(false);
+			//this.updateDom();
 		}
 		else if (notification === "DATA2") {
 			// set dataNotification
