@@ -29,7 +29,7 @@ Module.register("MMM-nutrislice-menu", {
 
 		// Schedule update timer.
 		//this.getData();
-		this.sendDataRequest(1);
+		this.sendDataRequest(true);
 		setInterval(function () {
 			self.updateDom();
 		}, this.config.updateInterval);
@@ -50,7 +50,7 @@ Module.register("MMM-nutrislice-menu", {
 		nextLoad = nextLoad;
 		var self = this;
 		setTimeout(function () {
-			self.sendDataRequest(1);
+			self.sendDataRequest(true);
 		}, nextLoad);
 	},
 
@@ -207,7 +207,7 @@ Module.register("MMM-nutrislice-menu", {
 	},
 
 
-	sendDataRequest: function (week) {
+	sendDataRequest: function (currentWeek) {
 		var self = this;
 		if (this.loaded === false) {
 			self.updateDom(self.config.animationSpeed);
@@ -222,12 +222,12 @@ Module.register("MMM-nutrislice-menu", {
 		const nextWeekDate = new Date();
 		nextWeekDate.setDate(currentDate.getDate()+1)
 		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
-		if (week = 2) {
+		if (currentWeek) {
 			const endpoint = this.setEndpoint(nextWeekDate);
-			this.sendSocketNotification("UPDATE2", endpoint);
+			this.sendSocketNotification("UPDATE", endpoint);
 		} else {
 			const endpoint = this.setEndpoint(currentDate);
-			this.sendSocketNotification("UPDATE", endpoint);
+			this.sendSocketNotification("UPDATE2", endpoint);
 		}
 	},
 
@@ -241,7 +241,7 @@ Module.register("MMM-nutrislice-menu", {
 			// set dataNotification
 			//console.log(payload)
 			this.dataNotification = JSON.parse(payload);
-			this.sendDataRequest(2);
+			this.sendDataRequest(false);
 			//this.updateDom();
 		}
 		else if (notification === "DATA2") {
