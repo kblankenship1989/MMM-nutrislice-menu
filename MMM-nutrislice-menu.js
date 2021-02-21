@@ -223,10 +223,10 @@ Module.register("MMM-nutrislice-menu", {
 		nextWeekDate.setDate(currentDate.getDate()+1)
 		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
 		if (week = 2) {
-			const endpoint = setEndpoint(nextWeekDate);
+			const endpoint = this.setEndpoint(nextWeekDate);
 			this.sendSocketNotification("UPDATE2", endpoint);
 		} else {
-			const endpoint = setEndpoint(currentDate);
+			const endpoint = this.setEndpoint(currentDate);
 			this.sendSocketNotification("UPDATE", endpoint);
 		}
 	},
