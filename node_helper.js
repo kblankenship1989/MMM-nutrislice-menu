@@ -35,10 +35,10 @@ module.exports = NodeHelper.create({
 			//headers: { 'RNV_API_TOKEN': this.config.apiKey }
 		}, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
-				if (notification = "UPDATE"){
+				if (notification == "UPDATE"){
 					self.sendSocketNotification("DATA", body);
 				}
-				else if (notification = "UPDATE2"){
+				else if (notification == "UPDATE2"){
 					self.sendSocketNotification("DATA2", body);
 				}
 			} else {
