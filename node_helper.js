@@ -25,9 +25,9 @@ module.exports = NodeHelper.create({
 		console.log("====================== Starting node_helper for module [" + this.name + "]");
 	},
 
-	getData: function(myUrl) {
+	getData: function(notification, myUrl) {
 		var self = this;
-		//myUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2020/10/12/?format=json";
+		//myUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2021/02/21/?format=json";
 
 		request({
 			url: myUrl,
@@ -35,7 +35,12 @@ module.exports = NodeHelper.create({
 			//headers: { 'RNV_API_TOKEN': this.config.apiKey }
 		}, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
-				self.sendSocketNotification("DATA", body);
+				if (notification = "UPDATE"){
+					self.sendSocketNotification("DATA", body);
+				}
+				else if (notification = "UPDATE2"){
+					self.sendSocketNotification("DATA2", body);
+				}
 			} else {
 				self.sendSocketNotification("STATUSERROR", response.statusCode);
 			}
@@ -47,9 +52,9 @@ module.exports = NodeHelper.create({
 
 	socketNotificationReceived: function(notification, payload) {
 		var self = this;
-		if (notification === "UPDATE" && self.started == false) {
+		if ((notification === "UPDATE" || notification === "UPDATE2") && self.started == false) {
 			self.sendSocketNotification("STARTED", true);
-			self.getData(payload);
+			self.getData(notification, payload);
 			self.started = true;
 		}
 	},

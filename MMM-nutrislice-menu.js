@@ -29,7 +29,7 @@ Module.register("MMM-nutrislice-menu", {
 
 		// Schedule update timer.
 		//this.getData();
-		this.sendDataRequest();
+		this.sendDataRequest(1);
 		setInterval(function () {
 			self.updateDom();
 		}, this.config.updateInterval);
@@ -50,7 +50,7 @@ Module.register("MMM-nutrislice-menu", {
 		nextLoad = nextLoad;
 		var self = this;
 		setTimeout(function () {
-			self.sendDataRequest();
+			self.sendDataRequest(1);
 		}, nextLoad);
 	},
 
@@ -85,6 +85,9 @@ Module.register("MMM-nutrislice-menu", {
 			//Format the data to the screen
 			var tableElement = document.createElement("table");
 			tableElement.className = this.config.tableClass;
+			if (this.dataNotification2) {
+				console.log("week 2 has data")
+			}
 			const mapOfDays = this.getMapOfDays(this.dataNotification);
 			console.log("mapOfDays" , mapOfDays);
 			if ((Object.keys(mapOfDays) || []).length > 0) {
@@ -195,7 +198,16 @@ Module.register("MMM-nutrislice-menu", {
 		};
 	},
 
-	sendDataRequest: function () {
+	setEndpoint(date) {
+		const nutrisliceEndpoint = this.config.nutrisliceEndpoint;
+		const menuType = this.config.menuType;
+		const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
+		console.log("endpoint: " + endpoint);
+		return endpoint;
+	},
+
+
+	sendDataRequest: function (week) {
 		var self = this;
 		if (this.loaded === false) {
 			self.updateDom(self.config.animationSpeed);
@@ -204,12 +216,19 @@ Module.register("MMM-nutrislice-menu", {
 
 		// the data if load
 		// send notification to helper
-		const nutrisliceEndpoint = this.config.nutrisliceEndpoint;
-		const menuType = this.config.menuType;
+		//websiteUrl = "https://pleasantvalley.nutrislice.com/menu/elementary/lunch/2021-02-21"
+		//ApiUrl     = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2021/02/21/?format=json";
 		const currentDate = new Date();
-		const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
-		console.log("endpoint: " + endpoint);
-		this.sendSocketNotification("UPDATE", endpoint);
+		const nextWeekDate = new Date();
+		nextWeekDate.setDate(currentDate.getDate()+1)
+		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
+		if (week = 2) {
+			const endpoint = setEndpoint(nextWeekDate);
+			this.sendSocketNotification("UPDATE2", endpoint);
+		} else {
+			const endpoint = setEndpoint(currentDate);
+			this.sendSocketNotification("UPDATE", endpoint);
+		}
 	},
 
 	// socketNotificationReceived from helper
@@ -222,8 +241,16 @@ Module.register("MMM-nutrislice-menu", {
 			// set dataNotification
 			//console.log(payload)
 			this.dataNotification = JSON.parse(payload);
+			this.sendDataRequest(2);
+			//this.updateDom();
+		}
+		else if (notification === "DATA2") {
+			// set dataNotification
+			//console.log(payload)
+			this.dataNotification2 = JSON.parse(payload);
 			this.updateDom();
-		} else if (notification === "STATUSERROR") {
+		}
+		else if (notification === "STATUSERROR") {
 			console.log(payload);
 		}
 	},
