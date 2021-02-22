@@ -14,7 +14,8 @@ Module.register("MMM-nutrislice-menu", {
 		menuType: "lunch",
 		nutrisliceEndpoint: "",
 		itemLimit: 0,
-		showPast: true
+		showPast: true,
+		daysToShow: 6
 	},
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
@@ -56,7 +57,6 @@ Module.register("MMM-nutrislice-menu", {
 
 	getDom: function () {
 		const itemLimit = this.config.itemLimit;
-		console.log("itemLimit: ", itemLimit);
 
 		// create element wrapper for show into the module
 		var wrapper = document.createElement("div");
@@ -82,16 +82,17 @@ Module.register("MMM-nutrislice-menu", {
 
 		// If this.dataNotification is not empty
 		if (this.dataNotification) {
+			const days = [...(this.dataNotification.days || [])];
 			//Format the data to the screen
 			var tableElement = document.createElement("table");
 			tableElement.className = this.config.tableClass;
 			if (this.dataNotification2) {
 				console.log("week 2 has data")
+				days.concat([...(this.dataNotification2.days || [])]);
 			}
-			const mapOfDays = this.getMapOfDays(this.dataNotification);
+			const mapOfDays = this.getMapOfDays(days);
 			console.log("mapOfDays" , mapOfDays);
 			if ((Object.keys(mapOfDays) || []).length > 0) {
-				//console.log("MapOfDay key: ", Object.keys(mapOfDays))
 				var tableRow = document.createElement("tr");
 
 				Object.keys(mapOfDays).forEach(function (day) {
@@ -148,16 +149,15 @@ Module.register("MMM-nutrislice-menu", {
 		return weekday[date.getDay()];
 	},
 
-	getMapOfDays(data) {
+	getMapOfDays(days) {
 		const mapOfDays = {};
 
 		//for (day in data.days || []) {
 		today = new Date();
 		today.setDate(today.getDate() - 1);
 		var showPast = this.config.showPast;
-		console.log("showPast: ", showPast);
-		for (key in Object.keys(data.days)) {
-			var day = data.days[key];
+		for (key in Object.keys(days)) {
+			var day = days[key];
 			var date = new Date(day.date);
 			if (day && day.date && (day.menu_items || []).length && (date >= today || showPast)) {
 				var listOfFood = [];
@@ -172,7 +172,7 @@ Module.register("MMM-nutrislice-menu", {
 					}
 				}
 				dayObj["foodList"] = listOfFood;
-				mapOfDays[this.getWeekDay(data.days[key].date)] = dayObj;
+				mapOfDays[this.getWeekDay(days[key].date)] = dayObj;
 				//mapOfDays[key] = listOfItems;
 			}
 		}
@@ -208,20 +208,18 @@ Module.register("MMM-nutrislice-menu", {
 
 
 	sendDataRequest: function (currentWeek) {
-		console.log("currentWeek", currentWeek);
 		var self = this;
 		if (this.loaded === false) {
 			self.updateDom(self.config.animationSpeed);
 		}
 		this.loaded = true;
-
 		// the data if load
 		// send notification to helper
 		//websiteUrl = "https://pleasantvalley.nutrislice.com/menu/elementary/lunch/2021-02-21"
 		//ApiUrl     = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2021/02/21/?format=json";
 		const currentDate = new Date();
 		const nextWeekDate = new Date();
-		nextWeekDate.setDate(currentDate.getDate()+1)
+		nextWeekDate.setDate(currentDate.getDate()+7)
 		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
 		if (currentWeek) {
 			const endpoint = this.setEndpoint(nextWeekDate);
@@ -240,14 +238,12 @@ Module.register("MMM-nutrislice-menu", {
 		}
 		else if (notification === "DATA") {
 			// set dataNotification
-			//console.log(payload)
 			this.dataNotification = JSON.parse(payload);
 			this.sendDataRequest(false);
 			//this.updateDom();
 		}
 		else if (notification === "DATA2") {
 			// set dataNotification
-			//console.log(payload)
 			this.dataNotification2 = JSON.parse(payload);
 			this.updateDom();
 		}
