@@ -84,13 +84,16 @@ Module.register("MMM-nutrislice-menu", {
 		// If this.dataNotification is not empty
 		if (this.dataNotification) {
 			console.log("days1: ", this.dataNotification.days);
-			const days = [...(this.dataNotification.days || [])];
+			var days = [...(this.dataNotification.days || [])];
 			//console.log(days);
 			//Format the data to the screen
 			if (this.dataNotification2) {
 				console.log("days2: ", this.dataNotification2.days);
 				console.log("week 2 has data");
-				days.concat([...(this.dataNotification2.days || [])]);
+				days = [
+					...days,
+					...(this.dataNotification2.days || [])
+				];
 				console.log("concat days: ", days);
 			}
 			const mapOfDays = this.getMapOfDays(days);
