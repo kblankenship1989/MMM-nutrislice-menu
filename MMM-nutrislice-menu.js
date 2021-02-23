@@ -15,7 +15,7 @@ Module.register("MMM-nutrislice-menu", {
 		nutrisliceEndpoint: "",
 		itemLimit: 0,
 		showPast: true,
-		daysToShow: 6
+		daysToShow: 5
 	},
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
@@ -84,30 +84,28 @@ Module.register("MMM-nutrislice-menu", {
 		if (this.dataNotification) {
 			const days = [...(this.dataNotification.days || [])];
 			//Format the data to the screen
-			var tableElement = document.createElement("table");
-			tableElement.className = this.config.tableClass;
 			if (this.dataNotification2) {
 				console.log("week 2 has data")
 				days.concat([...(this.dataNotification2.days || [])]);
 			}
 			const mapOfDays = this.getMapOfDays(days);
 			console.log("mapOfDays" , mapOfDays);
-			if ((Object.keys(mapOfDays) || []).length > 0) {
+			if ((mapOfDays || []).length > 0) {
+				var tableElement = document.createElement("table");
+				tableElement.className = this.config.tableClass;
 				var tableRow = document.createElement("tr");
-
-				Object.keys(mapOfDays).forEach(function (day) {
+				mapOfDays.forEach(function (day) {
 					var tableCell = document.createElement("td");
 					var dayItem = document.createElement("u");
-					if (mapOfDays[day].activityDay){
-						dayItem.innerHTML = day + "-" + mapOfDays[day].activityDay;
+					if (day.activityDay){
+						dayItem.innerHTML = day.dayOfWeek + "-" + day.activityDay;
 					} else {
-						dayItem.innerHTML = day;
+						dayItem.innerHTML = day.dayOfWeek;
 					}
 					tableCell.appendChild(dayItem);
 					tableCell.appendChild(document.createElement("br"));
 					var itemCount = 0;
-					mapOfDays[day].foodList.forEach(function (item) {
-						//console.log(itemCount, item);
+					day.foodList.forEach(function (item) {
 						if (itemCount < itemLimit || itemLimit == 0) {
 							var foodItem = document.createElement("span");
 							foodItem.innerHTML = item;
@@ -119,10 +117,15 @@ Module.register("MMM-nutrislice-menu", {
 					tableRow.appendChild(tableCell);
 				})
 				tableElement.appendChild(tableRow);
+				wrapper.appendChild(tableElement);
+				//end Format response to screen
 			}
-
-			wrapper.appendChild(tableElement);
-			//end Format response to screen
+			else {
+				//API returned days but they have no food items to display
+				messageElement.innerHTML = "No data";
+				wrapper.appendChild(messageElement);
+				return wrapper;
+			}
 		}
 
 
@@ -150,7 +153,7 @@ Module.register("MMM-nutrislice-menu", {
 	},
 
 	getMapOfDays(days) {
-		const mapOfDays = {};
+		const mapOfDays = [];
 
 		//for (day in data.days || []) {
 		today = new Date();
@@ -161,7 +164,7 @@ Module.register("MMM-nutrislice-menu", {
 			var date = new Date(day.date);
 			if (day && day.date && (day.menu_items || []).length && (date >= today || showPast)) {
 				var listOfFood = [];
-				var dayObj = {};
+				var dayObj = {dayOfWeek: this.getWeekDay(days[key].date)};
 				for (itemKey in Object.keys(day.menu_items)) {
 					var item = day.menu_items[itemKey];
 					if (item.text && (item.text.startsWith("Day") || item.text.startsWith("Hybrid"))) {
@@ -172,8 +175,11 @@ Module.register("MMM-nutrislice-menu", {
 					}
 				}
 				dayObj["foodList"] = listOfFood;
-				mapOfDays[this.getWeekDay(days[key].date)] = dayObj;
+				mapOfDays.push(dayObj);
 				//mapOfDays[key] = listOfItems;
+				if (Object.keys(mapOfDays).length >= this.config.daysToShow) {
+					break;
+				}
 			}
 		}
 		return mapOfDays;
@@ -215,8 +221,14 @@ Module.register("MMM-nutrislice-menu", {
 		this.loaded = true;
 		// the data if load
 		// send notification to helper
-		//websiteUrl = "https://pleasantvalley.nutrislice.com/menu/elementary/lunch/2021-02-21"
-		//ApiUrl     = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2021/02/21/?format=json";
+		/*
+		websiteUrl = "https://pleasantvalley.nutrislice.com/menu/elementary/lunch/2021-02-21"
+		const regExExtractUrl = /https:\/\/(.+)\.nutrislice\.com\/menu\/(.+)\/(.+)\//;
+		const match = websiteUrl.match(regExExtractUrl);
+		if (match.length == 4) {
+			ApiUrl = "https://${match[1]}.nutrislice.com/menu/api/weeks/school/${match[2]}/menu-type/${match[3]}/2021/02/21/?format=json";
+		}
+		*/
 		const currentDate = new Date();
 		const nextWeekDate = new Date();
 		nextWeekDate.setDate(currentDate.getDate()+7)
