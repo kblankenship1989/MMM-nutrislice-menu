@@ -24,6 +24,7 @@ Module.register("MMM-nutrislice-menu", {
 		var self = this;
 		Log.info("Starting module: " + this.name);
 		var dataNotification = null;
+		var dataNotification2 = null;
 
 		//Flag for check if module is loaded
 		this.loaded = false;
@@ -82,13 +83,15 @@ Module.register("MMM-nutrislice-menu", {
 
 		// If this.dataNotification is not empty
 		if (this.dataNotification) {
+			console.log("days1: ", this.dataNotification.days);
 			const days = [...(this.dataNotification.days || [])];
-			console.log(days);
+			//console.log(days);
 			//Format the data to the screen
 			if (this.dataNotification2) {
-				console.log("week 2 has data")
+				console.log("days2: ", this.dataNotification2.days);
+				console.log("week 2 has data");
 				days.concat([...(this.dataNotification2.days || [])]);
-				console.log(days);
+				//console.log(days);
 			}
 			const mapOfDays = this.getMapOfDays(days);
 			console.log("mapOfDays" , mapOfDays);
@@ -254,12 +257,14 @@ Module.register("MMM-nutrislice-menu", {
 		else if (notification === "DATA") {
 			// set dataNotification
 			this.dataNotification = JSON.parse(payload);
+			console.log("start date 1", this.dataNotification.start_date);
 			this.sendDataRequest(false);
 			//this.updateDom();
 		}
 		else if (notification === "DATA2") {
 			// set dataNotification
 			this.dataNotification2 = JSON.parse(payload);
+			console.log("start date 2", this.dataNotification2.start_date);
 			this.updateDom();
 		}
 		else if (notification === "STATUSERROR") {
