@@ -83,10 +83,12 @@ Module.register("MMM-nutrislice-menu", {
 		// If this.dataNotification is not empty
 		if (this.dataNotification) {
 			const days = [...(this.dataNotification.days || [])];
+			console.log(days);
 			//Format the data to the screen
 			if (this.dataNotification2) {
 				console.log("week 2 has data")
 				days.concat([...(this.dataNotification2.days || [])]);
+				console.log(days);
 			}
 			const mapOfDays = this.getMapOfDays(days);
 			console.log("mapOfDays" , mapOfDays);
@@ -175,6 +177,7 @@ Module.register("MMM-nutrislice-menu", {
 					}
 				}
 				dayObj["foodList"] = listOfFood;
+				console.log("day added to mapOfDays", date);
 				mapOfDays.push(dayObj);
 				//mapOfDays[key] = listOfItems;
 				if (Object.keys(mapOfDays).length >= this.config.daysToShow) {
