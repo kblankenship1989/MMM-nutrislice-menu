@@ -91,7 +91,7 @@ Module.register("MMM-nutrislice-menu", {
 				console.log("days2: ", this.dataNotification2.days);
 				console.log("week 2 has data");
 				days.concat([...(this.dataNotification2.days || [])]);
-				//console.log(days);
+				console.log("concat days: ", days);
 			}
 			const mapOfDays = this.getMapOfDays(days);
 			console.log("mapOfDays" , mapOfDays);
@@ -180,7 +180,7 @@ Module.register("MMM-nutrislice-menu", {
 					}
 				}
 				dayObj["foodList"] = listOfFood;
-				console.log("day added to mapOfDays", date);
+				//console.log("day added to mapOfDays", date);
 				mapOfDays.push(dayObj);
 				//mapOfDays[key] = listOfItems;
 				if (Object.keys(mapOfDays).length >= this.config.daysToShow) {
@@ -211,6 +211,14 @@ Module.register("MMM-nutrislice-menu", {
 	},
 
 	setEndpoint(date) {
+		/*
+		websiteUrl = "https://pleasantvalley.nutrislice.com/menu/elementary/lunch/2021-02-21"
+		const regExExtractUrl = /https:\/\/(.+)\.nutrislice\.com\/menu\/(.+)\/(.+)\//;
+		const match = websiteUrl.match(regExExtractUrl);
+		if (match.length == 4) {
+			ApiUrl = "https://${match[1]}.nutrislice.com/menu/api/weeks/school/${match[2]}/menu-type/${match[3]}/2021/02/21/?format=json";
+		}
+		*/
 		const nutrisliceEndpoint = this.config.nutrisliceEndpoint;
 		const menuType = this.config.menuType;
 		const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
@@ -227,23 +235,15 @@ Module.register("MMM-nutrislice-menu", {
 		this.loaded = true;
 		// the data if load
 		// send notification to helper
-		/*
-		websiteUrl = "https://pleasantvalley.nutrislice.com/menu/elementary/lunch/2021-02-21"
-		const regExExtractUrl = /https:\/\/(.+)\.nutrislice\.com\/menu\/(.+)\/(.+)\//;
-		const match = websiteUrl.match(regExExtractUrl);
-		if (match.length == 4) {
-			ApiUrl = "https://${match[1]}.nutrislice.com/menu/api/weeks/school/${match[2]}/menu-type/${match[3]}/2021/02/21/?format=json";
-		}
-		*/
 		const currentDate = new Date();
 		const nextWeekDate = new Date();
 		nextWeekDate.setDate(currentDate.getDate()+7)
 		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
 		if (currentWeek) {
-			const endpoint = this.setEndpoint(nextWeekDate);
+			const endpoint = this.setEndpoint(currentDate);
 			this.sendSocketNotification("UPDATE", endpoint);
 		} else {
-			const endpoint = this.setEndpoint(currentDate);
+			const endpoint = this.setEndpoint(nextWeekDate);
 			this.sendSocketNotification("UPDATE2", endpoint);
 		}
 	},
