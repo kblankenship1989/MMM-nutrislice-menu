@@ -69,6 +69,11 @@ Module.register("MMM-nutrislice-menu", {
 			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
+		if (buildBaseEndpoint == ""){
+			messageElement.innerHTML = "Unreconized <i>nutrislice Endpoint</i> set in config file";
+			wrapper.appendChild(messageElement);
+			return wrapper;
+		}
 
 		if (!this.loaded) {
 			messageElement.innerHTML = this.translate("LOADING");
@@ -213,18 +218,28 @@ Module.register("MMM-nutrislice-menu", {
 		};
 	},
 
-	setEndpoint(date) {
+	buildBaseEndpoint() {
 		/*
-		websiteUrl = "https://pleasantvalley.nutrislice.com/menu/elementary/lunch/2021-02-21"
-		const regExExtractUrl = /https:\/\/(.+)\.nutrislice\.com\/menu\/(.+)\/(.+)\//;
+		websiteUrl = "https://pleasantvalley.nutrislice.com/menu/elementary/lunch/"
+		ApiUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2021/02/21/?format=json";
+		*/
+		const websiteUrl = this.config.nutrisliceEndpoint;
+		const regExExtractUrl = /https:\/\/(.+)\.nutrislice\.com\/m\w*\/(.+)\/(.+)\//;
 		const match = websiteUrl.match(regExExtractUrl);
 		if (match.length == 4) {
-			ApiUrl = "https://${match[1]}.nutrislice.com/menu/api/weeks/school/${match[2]}/menu-type/${match[3]}/2021/02/21/?format=json";
+			const baseUrl = `https://${match[1]}.nutrislice.com/menu/api/weeks/school/${match[2]}/menu-type/${match[3]}`;
+			return baseUrl;
 		}
-		*/
-		const nutrisliceEndpoint = this.config.nutrisliceEndpoint;
+		return "";
+		const endpoint = `${BaseUrl}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
+	},
+	setEndpoint(date) {
+
+		//const nutrisliceEndpoint = this.config.nutrisliceEndpoint;
+		const baseUrl = buildBaseEndpoint();
 		const menuType = this.config.menuType;
-		const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
+		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
+		const endpoint = `${BaseUrl}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
 		console.log("endpoint: " + endpoint);
 		return endpoint;
 	},
