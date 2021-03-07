@@ -231,7 +231,6 @@ Module.register("MMM-nutrislice-menu", {
 			return baseUrl;
 		}
 		return "";
-		const endpoint = `${BaseUrl}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
 	},
 	setEndpoint(date) {
 
@@ -239,7 +238,7 @@ Module.register("MMM-nutrislice-menu", {
 		const baseUrl = this.buildBaseEndpoint();
 		const menuType = this.config.menuType;
 		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
-		const endpoint = `${BaseUrl}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
+		const endpoint = `${baseUrl}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
 		console.log("endpoint: " + endpoint);
 		return endpoint;
 	},
