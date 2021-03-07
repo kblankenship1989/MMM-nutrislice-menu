@@ -13,14 +13,14 @@ var config = {
         {
             module: 'MMM-nutrislice-menu',
             position:	'top_left',
-            header: 'menu',
+            header: 'School Menu',
             config: {
-                updateInterval: 3600000,
-		        retryDelay: 60000,
-		        menuType: 'lunch',
 		        nutrisliceEndpoint: 'ENTER YOUR MENU ENDPOINT HERE',
 		        itemLimit: 0,
 		        showPast: true
+                daysToShow: 5
+                updateInterval: 3600000,
+		        retryDelay: 60000,
             }
         }
     ]
@@ -31,10 +31,9 @@ var config = {
 
 | Option               | Description
 |--------------------- |-----------
-| `nutrisliceEndpoint` | *Required* Your menu endpoint <br><br>**Type:** `string` <br>example "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary"
-| `menuType`           | *Optional* Your menu type <br><br>**Type:** `string` <br>Default "lunch"
-| `title`              | *Optional* Title for the module on the screen <br><br>**Type:** `string` <br>Default "Menu"
+| `nutrisliceEndpoint` | *Required* Your menu endpoint <br><br>**Type:** `string` <br>example "https://pleasantvalley.nutrislice.com/menu/elementary/lunch/" or "https://polk-fl.nutrislice.com/m/davenport-elementary/lunch/"
 | `itemLimit`          | *Optional* Max number of items to show on a single day (0 = unlimited) <br><br>**Type:** `int` <br>Default 0
 | `showPast`           | *Optional* Should Days in the Past show (if this is false then come Tuesday you wont see Monday anymore) <br><br>**Type:** `booleen` <br>Default true
+| `daysToShow`         | *Optional* Max number of days to show <br><br>**Type:** `int` <br>Default 5
 | `updateInterval`     | *Optional* How often the module will call the API for new data <br><br>**Type:** `int`(milliseconds) <br>Default 3600000 milliseconds (1 hour)
 | `retryDelay`         | *Optional* How long to wait after a failed call to try again <br><br>**Type:** `int`(milliseconds) <br>Default 60000 milliseconds (1 minute)

@@ -11,7 +11,6 @@ Module.register("MMM-nutrislice-menu", {
 	defaults: {
 		updateInterval: 3600000,
 		retryDelay: 60000,
-		menuType: "lunch",
 		nutrisliceEndpoint: "",
 		itemLimit: 0,
 		showPast: true,
@@ -235,7 +234,6 @@ Module.register("MMM-nutrislice-menu", {
 
 		//const nutrisliceEndpoint = this.config.nutrisliceEndpoint;
 		const baseUrl = this.buildBaseEndpoint();
-		const menuType = this.config.menuType;
 		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
 		const endpoint = `${baseUrl}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
 		console.log("endpoint: " + endpoint);
