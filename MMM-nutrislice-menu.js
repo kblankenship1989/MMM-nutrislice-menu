@@ -69,7 +69,7 @@ Module.register("MMM-nutrislice-menu", {
 			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
-		if (buildBaseEndpoint == ""){
+		if (this.buildBaseEndpoint == ""){
 			messageElement.innerHTML = "Unreconized <i>nutrislice Endpoint</i> set in config file";
 			wrapper.appendChild(messageElement);
 			return wrapper;
@@ -236,7 +236,7 @@ Module.register("MMM-nutrislice-menu", {
 	setEndpoint(date) {
 
 		//const nutrisliceEndpoint = this.config.nutrisliceEndpoint;
-		const baseUrl = buildBaseEndpoint();
+		const baseUrl = this.buildBaseEndpoint();
 		const menuType = this.config.menuType;
 		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
 		const endpoint = `${BaseUrl}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
