@@ -69,7 +69,7 @@ Module.register("MMM-nutrislice-menu", {
 			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
-		if (this.buildBaseEndpoint == ""){
+		if (this.buildBaseEndpoint() == ""){
 			messageElement.innerHTML = "Unreconized <i>nutrislice Endpoint</i> set in config file";
 			wrapper.appendChild(messageElement);
 			return wrapper;
@@ -85,7 +85,6 @@ Module.register("MMM-nutrislice-menu", {
 			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
-
 		// If this.dataNotification is not empty
 		if (this.dataNotification) {
 			console.log("days1: ", this.dataNotification.days);
