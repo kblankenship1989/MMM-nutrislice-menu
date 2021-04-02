@@ -29,11 +29,11 @@ Module.register("MMM-nutrislice-menu", {
 		this.loaded = false;
 
 		// Schedule update timer.
-		//this.getData();
-		this.sendDataRequest(true);
-		setInterval(function () {
-			self.updateDom();
-		}, this.config.updateInterval);
+		//this.sendDataRequest(true);
+		//function () {
+		//	self.updateDom();
+		//}, this.config.updateInterval);
+		self.scheduleUpdate(1);
 	},
 
 
@@ -48,7 +48,6 @@ Module.register("MMM-nutrislice-menu", {
 		if (typeof delay !== "undefined" && delay >= 0) {
 			nextLoad = delay;
 		}
-		nextLoad = nextLoad;
 		var self = this;
 		setTimeout(function () {
 			self.sendDataRequest(true);
@@ -280,9 +279,11 @@ Module.register("MMM-nutrislice-menu", {
 			this.dataNotification2 = JSON.parse(payload);
 			console.log("start date 2", this.dataNotification2.start_date);
 			this.updateDom();
+			this.scheduleUpdate();
 		}
 		else if (notification === "STATUSERROR") {
 			console.log(payload);
+			this.scheduleUpdate(this.config.retryDelay)
 		}
 	},
 });
