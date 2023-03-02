@@ -227,7 +227,7 @@ Module.register("MMM-nutrislice-menu", {
 		const regExExtractUrl = /https:\/\/(.+)\.nutrislice\.com\/m\w*\/(.+)\/(.+)\//;
 		const match = websiteUrl.match(regExExtractUrl);
 		if ((match || []).length == 4) {
-			const baseUrl = `https://${match[1]}.nutrislice.com/menu/api/weeks/school/${match[2]}/menu-type/${match[3]}`;
+			const baseUrl = `https://${match[1]}.api.nutrislice.com/menu/api/weeks/school/${match[2]}/menu-type/${match[3]}`;
 			return baseUrl;
 		}
 		return "";
