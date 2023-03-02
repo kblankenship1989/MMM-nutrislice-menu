@@ -257,10 +257,10 @@ Module.register("MMM-nutrislice-menu", {
 		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
 		if (currentWeek) {
 			const endpoint = this.setEndpoint(currentDate);
-			this.sendSocketNotification("UPDATE", endpoint);
+			this.sendSocketNotification("UPDATE", endpoint,this.config.retryDelay);
 		} else {
 			const endpoint = this.setEndpoint(nextWeekDate);
-			this.sendSocketNotification("UPDATE2", endpoint);
+			this.sendSocketNotification("UPDATE2", endpoint,this.config.retryDelay);
 		}
 	},
 
@@ -288,11 +288,6 @@ Module.register("MMM-nutrislice-menu", {
 		}
 		else if (notification === "STATUSERROR") {
 			console.log(payload);
-			this.retryCnt ++;
-			this.scheduleUpdate(this.config.retryDelay);
-		}
-		else if (notification === "GETDATATIMEOUT"){
-			console.log("data requesed timeout trying again after retryDelay");
 			this.retryCnt ++;
 			this.scheduleUpdate(this.config.retryDelay);
 		}

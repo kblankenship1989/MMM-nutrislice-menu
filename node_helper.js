@@ -25,7 +25,7 @@ module.exports = NodeHelper.create({
 		console.log("====================== Starting node_helper for module [" + this.name + "]");
 	},
 
-	getData: function(notification, myUrl) {
+	getData: function(notification, myUrl,retryDelay) {
 		var self = this;
 		//myUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2021/02/21/?format=json";
 
@@ -46,16 +46,16 @@ module.exports = NodeHelper.create({
 			}
 		});
 		self.sendSocketNotification("GETDATATIMEOUT", true);
-		
-		//setTimeout(function() { self.getData(); }, this.config.retryDelay);
+
+		setTimeout(function() { self.getData(); }, retryDelay);
 	},
 
 
-	socketNotificationReceived: function(notification, payload) {
+	socketNotificationReceived: function(notification, payload,retryDelay) {
 		var self = this;
 		if ((notification === "UPDATE" || notification === "UPDATE2") && self.started == false) {
 			self.sendSocketNotification("STARTED", true);
-			self.getData(notification, payload);
+			self.getData(notification, payload,retryDelay);
 			self.started = true;
 		}
 	},
