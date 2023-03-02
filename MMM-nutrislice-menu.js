@@ -14,7 +14,8 @@ Module.register("MMM-nutrislice-menu", {
 		nutrisliceEndpoint: "",
 		itemLimit: 0,
 		showPast: true,
-		daysToShow: 5
+		daysToShow: 5,
+		retryLimit: 10
 	},
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
@@ -27,7 +28,7 @@ Module.register("MMM-nutrislice-menu", {
 
 		//Flag for check if module is loaded
 		this.loaded = false;
-
+		this.retryCnt = 0;
 		// Schedule update timer.
 		//this.sendDataRequest(true);
 		//function () {
@@ -44,14 +45,16 @@ Module.register("MMM-nutrislice-menu", {
 	 *  If empty, this.config.updateInterval is used.
 	 */
 	scheduleUpdate: function (delay) {
-		var nextLoad = this.config.updateInterval;
-		if (typeof delay !== "undefined" && delay >= 0) {
-			nextLoad = delay;
+		if (this.retryCnt <= this.config.retryLimit) {
+			var nextLoad = this.config.updateInterval;
+			if (typeof delay !== "undefined" && delay >= 0) {
+				nextLoad = delay;
+			}
+			var self = this;
+			setTimeout(function () {
+				self.sendDataRequest(true);
+			}, nextLoad);
 		}
-		var self = this;
-		setTimeout(function () {
-			self.sendDataRequest(true);
-		}, nextLoad);
 	},
 
 	getDom: function () {
@@ -271,6 +274,7 @@ Module.register("MMM-nutrislice-menu", {
 			// set dataNotification
 			this.dataNotification = JSON.parse(payload);
 			console.log("start date 1", this.dataNotification.start_date);
+			this.retryCnt = 0;
 			this.sendDataRequest(false);
 			//this.updateDom();
 		}
@@ -278,12 +282,19 @@ Module.register("MMM-nutrislice-menu", {
 			// set dataNotification
 			this.dataNotification2 = JSON.parse(payload);
 			console.log("start date 2", this.dataNotification2.start_date);
+			this.retryCnt = 0;
 			this.updateDom();
 			this.scheduleUpdate();
 		}
 		else if (notification === "STATUSERROR") {
 			console.log(payload);
-			this.scheduleUpdate(this.config.retryDelay)
+			this.retryCnt ++;
+			this.scheduleUpdate(this.config.retryDelay);
+		}
+		else if (notification === "GETDATATIMEOUT"){
+			console.log("data requesed timeout trying again after retryDelay");
+			this.retryCnt ++;
+			this.scheduleUpdate(this.config.retryDelay);
 		}
 	},
 });

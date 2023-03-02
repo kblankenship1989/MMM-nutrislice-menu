@@ -46,7 +46,8 @@ module.exports = NodeHelper.create({
 			}
 		});
 		self.sendSocketNotification("GETDATATIMEOUT", true);
-		setTimeout(function() { self.getData(); }, this.config.retryDelay);
+		
+		//setTimeout(function() { self.getData(); }, this.config.retryDelay);
 	},
 
 
