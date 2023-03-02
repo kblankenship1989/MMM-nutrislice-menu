@@ -257,10 +257,10 @@ Module.register("MMM-nutrislice-menu", {
 		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
 		if (currentWeek) {
 			const endpoint = this.setEndpoint(currentDate);
-			this.sendSocketNotification("UPDATE", endpoint,this.config.retryDelay);
+			this.sendSocketNotification("UPDATE", endpoint);
 		} else {
 			const endpoint = this.setEndpoint(nextWeekDate);
-			this.sendSocketNotification("UPDATE2", endpoint,this.config.retryDelay);
+			this.sendSocketNotification("UPDATE2", endpoint);
 		}
 	},
 
