@@ -272,9 +272,10 @@ Module.register("MMM-nutrislice-menu", {
 		}
 		else if (notification === "DATA") {
 			// set dataNotification
+			console.log(payload);
 			this.dataNotification = JSON.parse(payload);
 			console.log("start date 1", this.dataNotification.start_date);
-			this.retryCnt = 0;
+			//this.retryCnt = 0;
 			this.sendDataRequest(false);
 			//this.updateDom();
 		}
@@ -282,13 +283,13 @@ Module.register("MMM-nutrislice-menu", {
 			// set dataNotification
 			this.dataNotification2 = JSON.parse(payload);
 			console.log("start date 2", this.dataNotification2.start_date);
-			this.retryCnt = 0;
+			//this.retryCnt = 0;
 			this.updateDom();
 			this.scheduleUpdate();
 		}
 		else if (notification === "STATUSERROR") {
 			console.log(payload);
-			this.retryCnt ++;
+			//this.retryCnt ++;
 			this.scheduleUpdate(this.config.retryDelay);
 		}
 	},
