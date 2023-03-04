@@ -8,6 +8,7 @@
 var NodeHelper = require("node_helper");
 const request = require("request");
 var moment = require("moment");
+const Log = require("logger");
 
 module.exports = NodeHelper.create({
 
@@ -35,6 +36,7 @@ module.exports = NodeHelper.create({
 			//headers: { 'RNV_API_TOKEN': this.config.apiKey }
 		}, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
+				Log.log("NOTIFICATION: " + notification);
 				if (notification == "UPDATE"){
 					self.sendSocketNotification("DATA", body);
 				}

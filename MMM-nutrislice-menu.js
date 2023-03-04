@@ -135,6 +135,7 @@ Module.register("MMM-nutrislice-menu", {
 			}
 			else {
 				//API returned days but they have no food items to display
+				console.log("API returned days but they have no food items to display")
 				messageElement.innerHTML = "No data";
 				wrapper.appendChild(messageElement);
 				return wrapper;
@@ -238,7 +239,6 @@ Module.register("MMM-nutrislice-menu", {
 		const baseUrl = this.buildBaseEndpoint();
 		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
 		const endpoint = `${baseUrl}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
-		console.log("endpoint: " + endpoint);
 		return endpoint;
 	},
 
@@ -257,9 +257,11 @@ Module.register("MMM-nutrislice-menu", {
 		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
 		if (currentWeek) {
 			const endpoint = this.setEndpoint(currentDate);
+			console.log("UPDATE endpoint: " + endpoint);
 			this.sendSocketNotification("UPDATE", endpoint);
 		} else {
 			const endpoint = this.setEndpoint(nextWeekDate);
+			console.log("UPDATE2 endpoint: " + endpoint);
 			this.sendSocketNotification("UPDATE2", endpoint);
 		}
 	},
@@ -272,7 +274,6 @@ Module.register("MMM-nutrislice-menu", {
 		}
 		else if (notification === "DATA") {
 			// set dataNotification
-			console.log(payload);
 			this.dataNotification = JSON.parse(payload);
 			console.log("start date 1", this.dataNotification.start_date);
 			//this.retryCnt = 0;
@@ -291,6 +292,10 @@ Module.register("MMM-nutrislice-menu", {
 			console.log(payload);
 			//this.retryCnt ++;
 			this.scheduleUpdate(this.config.retryDelay);
+		}
+		else if (notification === "GETDATATIMEOUT") {
+			console.log("timeout");
+			//this.retryCnt ++;
 		}
 	},
 });
