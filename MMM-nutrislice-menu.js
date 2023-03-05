@@ -29,10 +29,16 @@ Module.register("MMM-nutrislice-menu", {
 		//Flag for check if module is loaded
 		this.loaded = false;
 		this.retryCnt = 0;
+		
 
 		//start menuProvider
 		this.menuProvider = MenuProvider.initialize(this);
 		this.menuProvider.start();
+
+		if (this.loaded === false) {
+			this.updateDom(this.config.animationSpeed);
+		}
+		this.loaded = true;
 
 		// Schedule update timer.
 		//this.getMenuData(true);
@@ -223,7 +229,7 @@ Module.register("MMM-nutrislice-menu", {
 	socketNotificationReceived: function (notification, payload) {
 		//console.log(notification);
 		if (notification === "NUTRISLICE_STARTED") {
-			this.updateDom();
+			//this.updateDom();
 		}
 		else if (notification === "CURRENT_WEEK_MENU") {
 			// set dataNotification

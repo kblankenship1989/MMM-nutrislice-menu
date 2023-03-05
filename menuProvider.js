@@ -53,10 +53,7 @@ const MenuProvider = Class.extend({
 		return endpoint;
 	},
 	getMenuData: function (currentWeek) {
-		if (this.loaded === false) {
-			this.updateDom(this.config.animationSpeed);
-		}
-		this.loaded = true;
+		
 		// the data if load
 		// send notification to helper
 		const currentDate = new Date();
