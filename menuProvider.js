@@ -74,7 +74,9 @@ const MenuProvider = Class.extend({
 	}
 });
 
-    /**
+
+
+/**
  * Static method to initialize a new Menu provider.
  *
  * @param {object} delegate The Menu module
@@ -82,7 +84,7 @@ const MenuProvider = Class.extend({
  */
 MenuProvider.initialize = function (delegate) {
 
-	const provider = new MenuProvider.providers[providerIdentifier]();
+	const provider = new MenuProvider();
 	const config = Object.assign({}, provider.defaults, delegate.config);
 
 	provider.delegate = delegate;
