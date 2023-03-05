@@ -45,9 +45,9 @@ Module.register("MMM-nutrislice-menu", {
 			if (typeof delay !== "undefined" && delay >= 0) {
 				nextLoad = delay;
 			}
-			setTimeout(function () {
-				this.getMenuData(true);
-			}, nextLoad);
+			// setTimeout(function () {
+			 	this.getMenuData(true);
+			// }, nextLoad);
 		}
 	},
 	getDom: function () {
@@ -212,7 +212,7 @@ Module.register("MMM-nutrislice-menu", {
 	buildBaseEndpoint: function () {
 		/*
 		websiteUrl = "https://pleasantvalley.nutrislice.com/menu/elementary/lunch/"
-		ApiUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2021/02/21/?format=json";
+		ApiUrl = "https://pleasantvalley.api.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2021/02/21/?format=json";
 		*/
 		const websiteUrl = this.config.nutrisliceEndpoint;
 		const regExExtractUrl = /https:\/\/(.+)\.nutrislice\.com\/m\w*\/(.+)\/(.+)\//;
