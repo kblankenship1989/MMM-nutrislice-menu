@@ -260,7 +260,7 @@ Module.register("MMM-nutrislice-menu", {
 		}
 		else if (notification === "CURRENT_WEEK_MENU") {
 			// set dataNotification
-			this.dataNotification = JSON.parse(payload);
+			this.dataNotification = payload;
 			console.log("start date 1", this.dataNotification.start_date);
 			//this.retryCnt = 0;
 			this.getMenuData(false);
@@ -268,7 +268,7 @@ Module.register("MMM-nutrislice-menu", {
 		}
 		else if (notification === "NEXT_WEEK_MENU") {
 			// set dataNotification
-			this.dataNotification2 = JSON.parse(payload);
+			this.dataNotification2 = payload;
 			console.log("start date 2", this.dataNotification2.start_date);
 			//this.retryCnt = 0;
 			this.updateDom();
