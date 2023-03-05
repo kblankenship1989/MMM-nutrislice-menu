@@ -7,7 +7,6 @@
 
 var NodeHelper = require("node_helper");
 const request = require("request");
-var moment = require("moment");
 const Log = require("logger");
 
 module.exports = NodeHelper.create({
@@ -34,6 +33,7 @@ module.exports = NodeHelper.create({
 			method: "GET"
 			//headers: { 'RNV_API_TOKEN': this.config.apiKey }
 		}, function (error, response, body) {
+			Log.log(this.name + ' request response for ' + myUrl + ': ' + JSON.stringify(response));
 			if (!error && response.statusCode == 200) {
 				if (notification == "FETCH_CURRENT_WEEK_MENU"){
 					this.sendSocketNotification("CURRENT_WEEK_MENU", body);
@@ -45,13 +45,12 @@ module.exports = NodeHelper.create({
 				this.sendSocketNotification("STATUSERROR", error);
 			}
 		});
-		this.sendSocketNotification("GETDATATIMEOUT", true);
-
-		setTimeout(function() { this.getData(); }, 60000);
 	},
 
 
 	socketNotificationReceived: function(notification, payload) {
+		Log.log(this.name + " has started: " + this.started);
+		Log.log(this.name + " has received notification: " + notification);
 		if ((notification === "FETCH_CURRENT_WEEK_MENU" || notification === "FETCH_NEXT_WEEK_MENU") && this.started == false) {
 			this.sendSocketNotification("NUTRISLICE_STARTED", true);
 			this.getData(notification, payload);

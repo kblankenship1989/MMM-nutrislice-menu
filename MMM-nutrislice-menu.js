@@ -279,9 +279,5 @@ Module.register("MMM-nutrislice-menu", {
 			//this.retryCnt ++;
 			this.scheduleUpdate(this.config.retryDelay);
 		}
-		else if (notification === "GETDATATIMEOUT") {
-			console.log("timeout");
-			//this.retryCnt ++;
-		}
 	}
 });
