@@ -17,9 +17,7 @@ Module.register("MMM-nutrislice-menu", {
 		daysToShow: 5,
 		retryLimit: 10
 	},
-
 	requiresVersion: "2.1.0", // Required version of MagicMirror
-
 	start: function () {
 		Log.info("Starting module: " + this.name);
 		var dataNotification = null;
@@ -29,14 +27,12 @@ Module.register("MMM-nutrislice-menu", {
 		this.loaded = false;
 		this.retryCnt = 0;
 		// Schedule update timer.
-		//this.sendDataRequest(true);
+		//this.getMenuData(true);
 		//function () {
 		//	this.updateDom();
 		//}, this.config.updateInterval);
 		this.scheduleUpdate(1);
 	},
-
-
 	/* scheduleUpdate()
 	 * Schedule next update.
 	 *
@@ -50,11 +46,10 @@ Module.register("MMM-nutrislice-menu", {
 				nextLoad = delay;
 			}
 			setTimeout(function () {
-				this.sendDataRequest(true);
+				this.getMenuData(true);
 			}, nextLoad);
 		}
 	},
-
 	getDom: function () {
 		const itemLimit = this.config.itemLimit;
 
@@ -150,8 +145,7 @@ Module.register("MMM-nutrislice-menu", {
 
 		return wrapper;
 	},
-
-	getWeekDay(dateString) {
+	getWeekDay: function (dateString) {
 		const date = new Date(dateString);
 		var weekday = new Array(7);
 		weekday[6] = "Sunday";
@@ -163,8 +157,7 @@ Module.register("MMM-nutrislice-menu", {
 		weekday[5] = "Saturday";
 		return weekday[date.getDay()];
 	},
-
-	getMapOfDays(days) {
+	getMapOfDays: function (days) {
 		const mapOfDays = [];
 
 		//for (day in data.days || []) {
@@ -216,8 +209,7 @@ Module.register("MMM-nutrislice-menu", {
 			es: "translations/es.json"
 		};
 	},
-
-	buildBaseEndpoint() {
+	buildBaseEndpoint: function () {
 		/*
 		websiteUrl = "https://pleasantvalley.nutrislice.com/menu/elementary/lunch/"
 		ApiUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2021/02/21/?format=json";
@@ -231,7 +223,7 @@ Module.register("MMM-nutrislice-menu", {
 		}
 		return "";
 	},
-	setEndpoint(date) {
+	setEndpoint: function (date) {
 
 		//const nutrisliceEndpoint = this.config.nutrisliceEndpoint;
 		const baseUrl = this.buildBaseEndpoint();
@@ -239,9 +231,7 @@ Module.register("MMM-nutrislice-menu", {
 		const endpoint = `${baseUrl}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
 		return endpoint;
 	},
-
-
-	sendDataRequest: function (currentWeek) {
+	getMenuData: function (currentWeek) {
 		if (this.loaded === false) {
 			this.updateDom(this.config.animationSpeed);
 		}
@@ -262,7 +252,6 @@ Module.register("MMM-nutrislice-menu", {
 			this.sendSocketNotification("FETCH_NEXT_WEEK_MENU", endpoint);
 		}
 	},
-
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
 		//console.log(notification);
@@ -274,7 +263,7 @@ Module.register("MMM-nutrislice-menu", {
 			this.dataNotification = JSON.parse(payload);
 			console.log("start date 1", this.dataNotification.start_date);
 			//this.retryCnt = 0;
-			this.sendDataRequest(false);
+			this.getMenuData(false);
 			//this.updateDom();
 		}
 		else if (notification === "NEXT_WEEK_MENU") {
@@ -294,5 +283,5 @@ Module.register("MMM-nutrislice-menu", {
 			console.log("timeout");
 			//this.retryCnt ++;
 		}
-	},
+	}
 });
