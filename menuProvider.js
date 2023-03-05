@@ -66,12 +66,12 @@ const MenuProvider = Class.extend({
 			const endpoint = this.setEndpoint(currentDate);
 			console.log("FETCH_CURRENT_WEEK_MENU endpoint: " + endpoint);
 			//this.sendSocketNotification("FETCH_CURRENT_WEEK_MENU", endpoint);
-            return(endpoint)
 		} else {
 			const endpoint = this.setEndpoint(nextWeekDate);
 			console.log("FETCH_NEXT_WEEK_MENU endpoint: " + endpoint);
-			this.sendSocketNotification("FETCH_NEXT_WEEK_MENU", endpoint);
+			//this.sendSocketNotification("FETCH_NEXT_WEEK_MENU", endpoint);
 		}
+        return(endpoint);
 	}
 });
 

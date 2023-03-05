@@ -230,7 +230,8 @@ Module.register("MMM-nutrislice-menu", {
 			this.dataNotification = payload;
 			console.log("start date 1", this.dataNotification.start_date);
 			//this.retryCnt = 0;
-			this.getMenuData(false);
+			//this.getMenuData(false);
+			this.sendSocketNotification("FETCH_NEXT_WEEK_MENU",this.menuProvider.getMenuData(false))
 			//this.updateDom();
 		}
 		else if (notification === "NEXT_WEEK_MENU") {
