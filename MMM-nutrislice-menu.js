@@ -17,6 +17,9 @@ Module.register("MMM-nutrislice-menu", {
 		daysToShow: 5,
 		retryLimit: 10
 	},
+
+	menuProvider: null,
+	
 	requiresVersion: "2.1.0", // Required version of MagicMirror
 	start: function () {
 		Log.info("Starting module: " + this.name);
@@ -26,6 +29,11 @@ Module.register("MMM-nutrislice-menu", {
 		//Flag for check if module is loaded
 		this.loaded = false;
 		this.retryCnt = 0;
+
+		//start menuProvider
+		this.menuProvider = MenuProvider.initialize(this);
+		this.menuProvider.start();
+
 		// Schedule update timer.
 		//this.getMenuData(true);
 		//function () {
@@ -45,9 +53,10 @@ Module.register("MMM-nutrislice-menu", {
 			if (typeof delay !== "undefined" && delay >= 0) {
 				nextLoad = delay;
 			}
-			// setTimeout(function () {
-			 	this.getMenuData(true);
-			// }, nextLoad);
+			setTimeout(() => {
+			 	//this.getMenuData(true);
+				this.menuProvider.getMenuData(true);
+			 }, nextLoad);
 		}
 	},
 	getDom: function () {
@@ -209,49 +218,7 @@ Module.register("MMM-nutrislice-menu", {
 			es: "translations/es.json"
 		};
 	},
-	buildBaseEndpoint: function () {
-		/*
-		websiteUrl = "https://pleasantvalley.nutrislice.com/menu/elementary/lunch/"
-		ApiUrl = "https://pleasantvalley.api.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2021/02/21/?format=json";
-		*/
-		const websiteUrl = this.config.nutrisliceEndpoint;
-		const regExExtractUrl = /https:\/\/(.+)\.nutrislice\.com\/m\w*\/(.+)\/(.+)\//;
-		const match = websiteUrl.match(regExExtractUrl);
-		if ((match || []).length == 4) {
-			const baseUrl = `https://${match[1]}.api.nutrislice.com/menu/api/weeks/school/${match[2]}/menu-type/${match[3]}`;
-			return baseUrl;
-		}
-		return "";
-	},
-	setEndpoint: function (date) {
 
-		//const nutrisliceEndpoint = this.config.nutrisliceEndpoint;
-		const baseUrl = this.buildBaseEndpoint();
-		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
-		const endpoint = `${baseUrl}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
-		return endpoint;
-	},
-	getMenuData: function (currentWeek) {
-		if (this.loaded === false) {
-			this.updateDom(this.config.animationSpeed);
-		}
-		this.loaded = true;
-		// the data if load
-		// send notification to helper
-		const currentDate = new Date();
-		const nextWeekDate = new Date();
-		nextWeekDate.setDate(currentDate.getDate()+7)
-		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
-		if (currentWeek) {
-			const endpoint = this.setEndpoint(currentDate);
-			console.log("FETCH_CURRENT_WEEK_MENU endpoint: " + endpoint);
-			this.sendSocketNotification("FETCH_CURRENT_WEEK_MENU", endpoint);
-		} else {
-			const endpoint = this.setEndpoint(nextWeekDate);
-			console.log("FETCH_NEXT_WEEK_MENU endpoint: " + endpoint);
-			this.sendSocketNotification("FETCH_NEXT_WEEK_MENU", endpoint);
-		}
-	},
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
 		//console.log(notification);
