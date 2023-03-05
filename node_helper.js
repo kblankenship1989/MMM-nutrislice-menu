@@ -21,7 +21,6 @@ module.exports = NodeHelper.create({
 	 */
 
 	start: function() {
-		this.started = false;
 		Log.log("====================== Starting node_helper for module [" + this.name + "]");
 	},
 
@@ -66,12 +65,10 @@ module.exports = NodeHelper.create({
 
 
 	socketNotificationReceived: function(notification, payload) {
-		Log.log(this.name + " has started: " + this.started);
 		Log.log(this.name + " has received notification: " + notification);
-		if ((notification === "FETCH_CURRENT_WEEK_MENU" || notification === "FETCH_NEXT_WEEK_MENU") && this.started == false) {
+		if ((notification === "FETCH_CURRENT_WEEK_MENU" || notification === "FETCH_NEXT_WEEK_MENU")) {
 			this.sendSocketNotification("NUTRISLICE_STARTED", true);
 			this.getData(notification, payload);
-			this.started = true;
 		}
 	},
 });
