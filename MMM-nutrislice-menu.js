@@ -55,7 +55,7 @@ Module.register("MMM-nutrislice-menu", {
 			}
 			setTimeout(() => {
 			 	//this.getMenuData(true);
-				this.menuProvider.getMenuData(true);
+				 this.sendSocketNotification("FETCH_CURRENT_WEEK_MENU",this.menuProvider.getMenuData(true));
 			 }, nextLoad);
 		}
 	},
@@ -72,7 +72,7 @@ Module.register("MMM-nutrislice-menu", {
 			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
-		if (this.buildBaseEndpoint() == ""){
+		if (this.menuProvider.buildBaseEndpoint() == ""){
 			messageElement.innerHTML = "Unreconized <i>nutrislice Endpoint</i> set in config file";
 			wrapper.appendChild(messageElement);
 			return wrapper;
@@ -147,7 +147,7 @@ Module.register("MMM-nutrislice-menu", {
 
 		var wrapperDataNotification = document.createElement("div");
 		// translations
-		wrapperDataNotification.innerHTML = this.translate("FETCH_CURRENT_WEEK_MENU") + " : " + new Date();
+		wrapperDataNotification.innerHTML = this.translate("UPDATE") + " : " + new Date();
 		//wrapperDataNotification.innerHTML =  "Data" + ": " + this.result;
 		wrapper.appendChild(wrapperDataNotification);
 
