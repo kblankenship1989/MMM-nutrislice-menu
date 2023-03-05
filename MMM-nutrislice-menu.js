@@ -21,7 +21,6 @@ Module.register("MMM-nutrislice-menu", {
 	requiresVersion: "2.1.0", // Required version of MagicMirror
 
 	start: function () {
-		var self = this;
 		Log.info("Starting module: " + this.name);
 		var dataNotification = null;
 		var dataNotification2 = null;
@@ -32,9 +31,9 @@ Module.register("MMM-nutrislice-menu", {
 		// Schedule update timer.
 		//this.sendDataRequest(true);
 		//function () {
-		//	self.updateDom();
+		//	this.updateDom();
 		//}, this.config.updateInterval);
-		self.scheduleUpdate(1);
+		this.scheduleUpdate(1);
 	},
 
 
@@ -50,9 +49,8 @@ Module.register("MMM-nutrislice-menu", {
 			if (typeof delay !== "undefined" && delay >= 0) {
 				nextLoad = delay;
 			}
-			var self = this;
 			setTimeout(function () {
-				self.sendDataRequest(true);
+				this.sendDataRequest(true);
 			}, nextLoad);
 		}
 	},
@@ -145,7 +143,7 @@ Module.register("MMM-nutrislice-menu", {
 
 		var wrapperDataNotification = document.createElement("div");
 		// translations
-		wrapperDataNotification.innerHTML = this.translate("UPDATE") + " : " + new Date();
+		wrapperDataNotification.innerHTML = this.translate("FETCH_CURRENT_WEEK_MENU") + " : " + new Date();
 		//wrapperDataNotification.innerHTML =  "Data" + ": " + this.result;
 		wrapper.appendChild(wrapperDataNotification);
 
@@ -244,9 +242,8 @@ Module.register("MMM-nutrislice-menu", {
 
 
 	sendDataRequest: function (currentWeek) {
-		var self = this;
 		if (this.loaded === false) {
-			self.updateDom(self.config.animationSpeed);
+			this.updateDom(this.config.animationSpeed);
 		}
 		this.loaded = true;
 		// the data if load
@@ -257,22 +254,22 @@ Module.register("MMM-nutrislice-menu", {
 		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
 		if (currentWeek) {
 			const endpoint = this.setEndpoint(currentDate);
-			console.log("UPDATE endpoint: " + endpoint);
-			this.sendSocketNotification("UPDATE", endpoint);
+			console.log("FETCH_CURRENT_WEEK_MENU endpoint: " + endpoint);
+			this.sendSocketNotification("FETCH_CURRENT_WEEK_MENU", endpoint);
 		} else {
 			const endpoint = this.setEndpoint(nextWeekDate);
-			console.log("UPDATE2 endpoint: " + endpoint);
-			this.sendSocketNotification("UPDATE2", endpoint);
+			console.log("FETCH_NEXT_WEEK_MENU endpoint: " + endpoint);
+			this.sendSocketNotification("FETCH_NEXT_WEEK_MENU", endpoint);
 		}
 	},
 
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
 		//console.log(notification);
-		if (notification === "STARTED") {
+		if (notification === "NUTRISLICE_STARTED") {
 			this.updateDom();
 		}
-		else if (notification === "DATA") {
+		else if (notification === "CURRENT_WEEK_MENU") {
 			// set dataNotification
 			this.dataNotification = JSON.parse(payload);
 			console.log("start date 1", this.dataNotification.start_date);
@@ -280,7 +277,7 @@ Module.register("MMM-nutrislice-menu", {
 			this.sendDataRequest(false);
 			//this.updateDom();
 		}
-		else if (notification === "DATA2") {
+		else if (notification === "NEXT_WEEK_MENU") {
 			// set dataNotification
 			this.dataNotification2 = JSON.parse(payload);
 			console.log("start date 2", this.dataNotification2.start_date);

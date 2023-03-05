@@ -23,11 +23,10 @@ module.exports = NodeHelper.create({
 
 	start: function() {
 		this.started = false;
-		console.log("====================== Starting node_helper for module [" + this.name + "]");
+		Log.log("====================== Starting node_helper for module [" + this.name + "]");
 	},
 
 	getData: function(notification, myUrl) {
-		var self = this;
 		//myUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2021/02/21/?format=json";
 
 		request({
@@ -36,31 +35,27 @@ module.exports = NodeHelper.create({
 			//headers: { 'RNV_API_TOKEN': this.config.apiKey }
 		}, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
-				Log.log("NOTIFICATION: " + notification);
-				if (notification == "UPDATE"){
-					self.sendSocketNotification("DATA", body);
+				if (notification == "FETCH_CURRENT_WEEK_MENU"){
+					this.sendSocketNotification("CURRENT_WEEK_MENU", body);
 				}
-				else if (notification == "UPDATE2"){
-					self.sendSocketNotification("DATA2", body);
+				else if (notification == "FETCH_NEXT_WEEK_MENU"){
+					this.sendSocketNotification("NEXT_WEEK_MENU", body);
 				}
 			} else {
-				self.sendSocketNotification("STATUSERROR", response.statusCode);
+				this.sendSocketNotification("STATUSERROR", error);
 			}
 		});
-		self.sendSocketNotification("GETDATATIMEOUT", true);
+		this.sendSocketNotification("GETDATATIMEOUT", true);
 
-		setTimeout(function() { self.getData(); }, 60000);
+		setTimeout(function() { this.getData(); }, 60000);
 	},
 
 
 	socketNotificationReceived: function(notification, payload) {
-		var self = this;
-		if ((notification === "UPDATE" || notification === "UPDATE2") && self.started == false) {
-			self.sendSocketNotification("STARTED", true);
-			self.getData(notification, payload);
-			self.started = true;
+		if ((notification === "FETCH_CURRENT_WEEK_MENU" || notification === "FETCH_NEXT_WEEK_MENU") && this.started == false) {
+			this.sendSocketNotification("NUTRISLICE_STARTED", true);
+			this.getData(notification, payload);
+			this.started = true;
 		}
 	},
-
-
 });
