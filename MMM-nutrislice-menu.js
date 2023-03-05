@@ -1,4 +1,4 @@
-/* global Module */
+/* global Module, MenuProvider */
 
 /* Magic Mirror
  * Module: MMM-nutrislice-menu
@@ -19,7 +19,7 @@ Module.register("MMM-nutrislice-menu", {
 	},
 
 	menuProvider: null,
-	
+
 	requiresVersion: "2.1.0", // Required version of MagicMirror
 	start: function () {
 		Log.info("Starting module: " + this.name);
@@ -201,7 +201,7 @@ Module.register("MMM-nutrislice-menu", {
 	},
 
 	getScripts: function () {
-		return [];
+		return ["menuProvider.js"];
 	},
 
 	getStyles: function () {
