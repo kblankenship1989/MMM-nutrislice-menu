@@ -30,7 +30,7 @@ module.exports = NodeHelper.create({
 
 		fetch(myUrl)
 			.then(NodeHelper.checkFetchStatus)
-			.then((response) => response.json)
+			.then((response) => response.json())
 			.then((jsonResponse) => {
 				Log.log(this.name + 'notification = ' + notification);
 				if (notification == "FETCH_CURRENT_WEEK_MENU"){
