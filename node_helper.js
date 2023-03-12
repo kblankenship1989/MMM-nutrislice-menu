@@ -6,9 +6,9 @@
  */
 
 var NodeHelper = require("node_helper");
-const request = require("request");
-var moment = require("moment");
 const Log = require("logger");
+const { request } = require("./request-helper");
+
 
 module.exports = NodeHelper.create({
 
@@ -29,36 +29,34 @@ module.exports = NodeHelper.create({
 	getData: function(notification, myUrl) {
 		var self = this;
 		//myUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2021/02/21/?format=json";
-
 		request({
 			url: myUrl,
-			method: "GET"
-			//headers: { 'RNV_API_TOKEN': this.config.apiKey }
-		}, function (error, response, body) {
-			if (!error && response.statusCode == 200) {
-				Log.log("NOTIFICATION: " + notification);
-				if (notification == "UPDATE"){
-					self.sendSocketNotification("DATA", body);
-				}
-				else if (notification == "UPDATE2"){
-					self.sendSocketNotification("DATA2", body);
-				}
-			} else {
-				self.sendSocketNotification("STATUSERROR", response.statusCode);
+			method: "GET",
+			logger: Log,
+			retryDelay: this.config.retryDelay,
+			retryLimit: this.config.retryLimit,
+		}, (body) => {
+			if (notification == "UPDATE"){
+				self.sendSocketNotification("DATA", body);
 			}
+			else if (notification == "UPDATE2"){
+				self.sendSocketNotification("DATA2", body);
+			}
+		},
+		() => {
+			self.sendSocketNotification("REQUEST_ERROR");
 		});
-		self.sendSocketNotification("GETDATATIMEOUT", true);
-
-		setTimeout(function() { self.getData(); }, 60000);
 	},
 
 
 	socketNotificationReceived: function(notification, payload) {
 		var self = this;
-		if ((notification === "UPDATE" || notification === "UPDATE2") && self.started == false) {
+		if ((notification === "UPDATE" || notification === "UPDATE2")) {
 			self.sendSocketNotification("STARTED", true);
 			self.getData(notification, payload);
 			self.started = true;
+		} else if(notification === "SET_CONFIG"){
+			self.config = payload;
 		}
 	},
 

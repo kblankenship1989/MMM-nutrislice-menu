@@ -28,13 +28,10 @@ Module.register("MMM-nutrislice-menu", {
 
 		//Flag for check if module is loaded
 		this.loaded = false;
-		this.retryCnt = 0;
 		// Schedule update timer.
-		//this.sendDataRequest(true);
-		//function () {
-		//	self.updateDom();
-		//}, this.config.updateInterval);
-		self.scheduleUpdate(1);
+		this.sendSocketNotification("SET_CONFIG", this.config);
+
+		self.scheduleUpdate(true);
 	},
 
 
@@ -44,16 +41,15 @@ Module.register("MMM-nutrislice-menu", {
 	 * argument delay number - Milliseconds before next update.
 	 *  If empty, this.config.updateInterval is used.
 	 */
-	scheduleUpdate: function (delay) {
-		if (this.retryCnt <= this.config.retryLimit) {
-			var nextLoad = this.config.updateInterval;
-			if (typeof delay !== "undefined" && delay >= 0) {
-				nextLoad = delay;
-			}
+	scheduleUpdate: function (immediate = false) {
+		if (immediate) {
+			this.sendDataRequest(true);
+		}else {
+			console.log("Scheduling update in " + this.config.updateInterval + " milliseconds");
 			var self = this;
 			setTimeout(function () {
 				self.sendDataRequest(true);
-			}, nextLoad);
+			}, this.config.updateInterval);
 		}
 	},
 
@@ -71,7 +67,7 @@ Module.register("MMM-nutrislice-menu", {
 			return wrapper;
 		}
 		if (this.buildBaseEndpoint() == ""){
-			messageElement.innerHTML = "Unreconized <i>nutrislice Endpoint</i> set in config file";
+			messageElement.innerHTML = "Unrecognized <i>nutrislice Endpoint</i> set in config file";
 			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
@@ -288,14 +284,8 @@ Module.register("MMM-nutrislice-menu", {
 			this.updateDom();
 			this.scheduleUpdate();
 		}
-		else if (notification === "STATUSERROR") {
-			console.log(payload);
-			//this.retryCnt ++;
-			this.scheduleUpdate(this.config.retryDelay);
-		}
-		else if (notification === "GETDATATIMEOUT") {
-			console.log("timeout");
-			//this.retryCnt ++;
+		else if (notification === "REQUEST_ERROR") {
+			this.scheduleUpdate();
 		}
 	},
 });
