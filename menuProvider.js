@@ -55,19 +55,17 @@ const MenuProvider = Class.extend({
 	getMenuData: function (currentWeek) {
 		
 		// the data if load
-		// send notification to helper
+		// send endpoint back to send notification to helper
 		const currentDate = new Date();
 		const nextWeekDate = new Date();
 		nextWeekDate.setDate(currentDate.getDate()+7)
 		if (currentWeek) {
 			const endpoint = this.setEndpoint(currentDate);
 			console.log("FETCH_CURRENT_WEEK_MENU endpoint: " + endpoint);
-			//this.sendSocketNotification("FETCH_CURRENT_WEEK_MENU", endpoint);
             return(endpoint);
 		} else {
 			const endpoint = this.setEndpoint(nextWeekDate);
 			console.log("FETCH_NEXT_WEEK_MENU endpoint: " + endpoint);
-			//this.sendSocketNotification("FETCH_NEXT_WEEK_MENU", endpoint);
             return(endpoint);
 		}
 	}

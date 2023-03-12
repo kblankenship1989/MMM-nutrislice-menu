@@ -41,11 +41,6 @@ Module.register("MMM-nutrislice-menu", {
 		}
 		this.loaded = true;
 
-		// Schedule update timer.
-		//this.getMenuData(true);
-		//function () {
-		//	this.updateDom();
-		//}, this.config.updateInterval);
 		this.scheduleUpdate(1);
 	},
 	/* scheduleUpdate()
@@ -61,9 +56,10 @@ Module.register("MMM-nutrislice-menu", {
 				nextLoad = delay;
 			}
 			setTimeout(() => {
-			 	//this.getMenuData(true);
 				 this.sendSocketNotification("FETCH_CURRENT_WEEK_MENU",this.menuProvider.getMenuData(true));
 			 }, nextLoad);
+		} else {
+			updateDom()
 		}
 	},
 	getDom: function () {
@@ -84,9 +80,13 @@ Module.register("MMM-nutrislice-menu", {
 			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
-
 		if (!this.loaded) {
 			messageElement.innerHTML = this.translate("LOADING");
+			wrapper.appendChild(messageElement);
+			return wrapper;
+		}
+		if (this.retryCnt > this.config.retryLimit) {
+			messageElement.innerHTML = this.translate("NO_MORE_RETRY");
 			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
@@ -176,7 +176,6 @@ Module.register("MMM-nutrislice-menu", {
 	getMapOfDays: function (days) {
 		const mapOfDays = [];
 
-		//for (day in data.days || []) {
 		today = new Date();
 		today.setDate(today.getDate() - 1);
 		var showPast = this.config.showPast;
@@ -234,19 +233,16 @@ Module.register("MMM-nutrislice-menu", {
 	socketNotificationReceived: function (notification, payload) {
 		//console.log(notification);
 		if (notification === "NUTRISLICE_STARTED") {
-			//this.updateDom();
 		}
 		else if (notification === "CURRENT_WEEK_MENU") {
-			// set dataNotification
+			// set dataNotification for current week
 			this.dataNotification = payload;
 			console.log("start date 1", this.dataNotification.start_date);
 			this.retryCnt = 0;
-			//this.getMenuData(false);
 			this.sendSocketNotification("FETCH_NEXT_WEEK_MENU",this.menuProvider.getMenuData(false))
-			//this.updateDom();
 		}
 		else if (notification === "NEXT_WEEK_MENU") {
-			// set dataNotification
+			// set dataNotification for next week
 			this.dataNotification2 = payload;
 			console.log("start date 2", this.dataNotification2.start_date);
 			this.retryCnt = 0;
