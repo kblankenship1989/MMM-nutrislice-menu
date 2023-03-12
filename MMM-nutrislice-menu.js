@@ -191,7 +191,7 @@ Module.register("MMM-nutrislice-menu", {
 					if (item.text) {
 						if((item.text.startsWith("Day") || item.text.startsWith("Hybrid"))) {
 							dayObj["activityDay"] = item.text;
-						} else if (showMenuText) {
+						} else if (this.config.showMenuText) {
 							listOfFood.push(item.text);
 						}
 					}
