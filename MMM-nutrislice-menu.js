@@ -9,13 +9,14 @@
 
 Module.register("MMM-nutrislice-menu", {
 	defaults: {
-		updateInterval: 3600000,
-		retryDelay: 60000,
+		updateInterval: 3600000, //1 hour
+		retryDelay: 60000, //1 minute
 		nutrisliceEndpoint: "",
 		itemLimit: 0,
 		showPast: true,
 		daysToShow: 5,
-		retryLimit: 10
+		retryLimit: 10,
+		showMenuText: true
 	},
 
 	menuProvider: null,
@@ -187,8 +188,12 @@ Module.register("MMM-nutrislice-menu", {
 				var dayObj = {dayOfWeek: this.getWeekDay(days[key].date)};
 				for (itemKey in Object.keys(day.menu_items)) {
 					var item = day.menu_items[itemKey];
-					if (item.text && (item.text.startsWith("Day") || item.text.startsWith("Hybrid"))) {
-						dayObj["activityDay"] = item.text;
+					if (item.text) {
+						if((item.text.startsWith("Day") || item.text.startsWith("Hybrid"))) {
+							dayObj["activityDay"] = item.text;
+						} else if (showMenuText) {
+							listOfFood.push(item.text);
+						}
 					}
 					if (item.food && item.food.name) {
 						listOfFood.push(item.food.name);
@@ -235,7 +240,7 @@ Module.register("MMM-nutrislice-menu", {
 			// set dataNotification
 			this.dataNotification = payload;
 			console.log("start date 1", this.dataNotification.start_date);
-			//this.retryCnt = 0;
+			this.retryCnt = 0;
 			//this.getMenuData(false);
 			this.sendSocketNotification("FETCH_NEXT_WEEK_MENU",this.menuProvider.getMenuData(false))
 			//this.updateDom();
@@ -244,13 +249,13 @@ Module.register("MMM-nutrislice-menu", {
 			// set dataNotification
 			this.dataNotification2 = payload;
 			console.log("start date 2", this.dataNotification2.start_date);
-			//this.retryCnt = 0;
+			this.retryCnt = 0;
 			this.updateDom();
 			this.scheduleUpdate();
 		}
 		else if (notification === "STATUSERROR") {
 			console.log(payload);
-			//this.retryCnt ++;
+			this.retryCnt ++;
 			this.scheduleUpdate(this.config.retryDelay);
 		}
 	}
