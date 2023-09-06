@@ -1,4 +1,5 @@
 {
   "TITLE": "Title",
-  "UPDATE": "Update"
+  "UPDATE": "Update",
+  "NO_MORE_RETRY": "API failures have exceeded the RetryLimit"
 }

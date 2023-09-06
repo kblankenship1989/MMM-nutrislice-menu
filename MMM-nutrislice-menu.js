@@ -1,4 +1,4 @@
-/* global Module */
+/* global Module, MenuProvider */
 
 /* Magic Mirror
  * Module: MMM-nutrislice-menu
@@ -9,8 +9,8 @@
 
 Module.register("MMM-nutrislice-menu", {
 	defaults: {
-		updateInterval: 3600000,
-		retryDelay: 60000,
+		updateInterval: 3600000, //1 hour
+		retryDelay: 60000, //1 minute
 		nutrisliceEndpoint: "",
 		itemLimit: 0,
 		showPast: true,
@@ -21,13 +21,14 @@ Module.register("MMM-nutrislice-menu", {
 			"Day 2":"2-Art & Science",
 			"Day 3":"3-PE & Henry Library",
 			"Day 4":"4-Music & Deb Library"
-		}
+		},
+		showMenuText: true
 	},
 
-	requiresVersion: "2.1.0", // Required version of MagicMirror
+	menuProvider: null,
 
+	requiresVersion: "2.1.0", // Required version of MagicMirror
 	start: function () {
-		var self = this;
 		Log.info("Starting module: " + this.name);
 		var dataNotification = null;
 		var dataNotification2 = null;
@@ -35,15 +36,19 @@ Module.register("MMM-nutrislice-menu", {
 		//Flag for check if module is loaded
 		this.loaded = false;
 		this.retryCnt = 0;
-		// Schedule update timer.
-		//this.sendDataRequest(true);
-		//function () {
-		//	self.updateDom();
-		//}, this.config.updateInterval);
-		self.scheduleUpdate(1);
+		
+
+		//start menuProvider
+		this.menuProvider = MenuProvider.initialize(this);
+		this.menuProvider.start();
+
+		if (this.loaded === false) {
+			this.updateDom(this.config.animationSpeed);
+		}
+		this.loaded = true;
+
+		this.scheduleUpdate(1);
 	},
-
-
 	/* scheduleUpdate()
 	 * Schedule next update.
 	 *
@@ -56,13 +61,13 @@ Module.register("MMM-nutrislice-menu", {
 			if (typeof delay !== "undefined" && delay >= 0) {
 				nextLoad = delay;
 			}
-			var self = this;
-			setTimeout(function () {
-				self.sendDataRequest(true);
-			}, nextLoad);
+			setTimeout(() => {
+				 this.sendSocketNotification("FETCH_CURRENT_WEEK_MENU",this.menuProvider.getMenuData(true));
+			 }, nextLoad);
+		} else {
+			updateDom()
 		}
 	},
-
 	getDom: function () {
 		const itemLimit = this.config.itemLimit;
 
@@ -76,14 +81,18 @@ Module.register("MMM-nutrislice-menu", {
 			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
-		if (this.buildBaseEndpoint() == ""){
+		if (this.menuProvider.buildBaseEndpoint() == ""){
 			messageElement.innerHTML = "Unreconized <i>nutrislice Endpoint</i> set in config file";
 			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
-
 		if (!this.loaded) {
 			messageElement.innerHTML = this.translate("LOADING");
+			wrapper.appendChild(messageElement);
+			return wrapper;
+		}
+		if (this.retryCnt > this.config.retryLimit) {
+			messageElement.innerHTML = this.translate("NO_MORE_RETRY");
 			wrapper.appendChild(messageElement);
 			return wrapper;
 		}
@@ -158,8 +167,7 @@ Module.register("MMM-nutrislice-menu", {
 
 		return wrapper;
 	},
-
-	getWeekDay(dateString) {
+	getWeekDay: function (dateString) {
 		const date = new Date(dateString);
 		var weekday = new Array(7);
 		weekday[6] = "Sunday";
@@ -171,11 +179,9 @@ Module.register("MMM-nutrislice-menu", {
 		weekday[5] = "Saturday";
 		return weekday[date.getDay()];
 	},
-
-	getMapOfDays(days) {
+	getMapOfDays: function (days) {
 		const mapOfDays = [];
 
-		//for (day in data.days || []) {
 		today = new Date();
 		today.setDate(today.getDate() - 1);
 		var showPast = this.config.showPast;
@@ -187,8 +193,12 @@ Module.register("MMM-nutrislice-menu", {
 				var dayObj = {dayOfWeek: this.getWeekDay(days[key].date)};
 				for (itemKey in Object.keys(day.menu_items)) {
 					var item = day.menu_items[itemKey];
-					if (item.text in this.config.dayText) {
-						dayObj["activityDay"] = this.config.dayText[item.text];
+					if (item.text) {
+						if (item.text in this.config.dayText) {
+							dayObj["activityDay"] = this.config.dayText[item.text];
+						} else if (this.config.showMenuText) {
+							listOfFood.push(item.text);
+						}
 					}
 					if (item.food && item.food.name) {
 						listOfFood.push(item.food.name);
@@ -207,7 +217,7 @@ Module.register("MMM-nutrislice-menu", {
 	},
 
 	getScripts: function () {
-		return [];
+		return ["menuProvider.js"];
 	},
 
 	getStyles: function () {
@@ -225,83 +235,30 @@ Module.register("MMM-nutrislice-menu", {
 		};
 	},
 
-	buildBaseEndpoint() {
-		/*
-		websiteUrl = "https://pleasantvalley.nutrislice.com/menu/elementary/lunch/"
-		ApiUrl = "https://pleasantvalley.nutrislice.com/menu/api/weeks/school/elementary/menu-type/lunch/2021/02/21/?format=json";
-		*/
-		const websiteUrl = this.config.nutrisliceEndpoint;
-		const regExExtractUrl = /https:\/\/(.+)\.nutrislice\.com\/m\w*\/(.+)\/(.+)\//;
-		const match = websiteUrl.match(regExExtractUrl);
-		if ((match || []).length == 4) {
-			const baseUrl = `https://${match[1]}.api.nutrislice.com/menu/api/weeks/school/${match[2]}/menu-type/${match[3]}`;
-			return baseUrl;
-		}
-		return "";
-	},
-	setEndpoint(date) {
-
-		//const nutrisliceEndpoint = this.config.nutrisliceEndpoint;
-		const baseUrl = this.buildBaseEndpoint();
-		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
-		const endpoint = `${baseUrl}/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/?format=json`;
-		return endpoint;
-	},
-
-
-	sendDataRequest: function (currentWeek) {
-		var self = this;
-		if (this.loaded === false) {
-			self.updateDom(self.config.animationSpeed);
-		}
-		this.loaded = true;
-		// the data if load
-		// send notification to helper
-		const currentDate = new Date();
-		const nextWeekDate = new Date();
-		nextWeekDate.setDate(currentDate.getDate()+7)
-		//const endpoint = `https://${nutrisliceEndpoint}/menu-type/${menuType}/${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()}/?format=json`;
-		if (currentWeek) {
-			const endpoint = this.setEndpoint(currentDate);
-			console.log("UPDATE endpoint: " + endpoint);
-			this.sendSocketNotification("UPDATE", endpoint);
-		} else {
-			const endpoint = this.setEndpoint(nextWeekDate);
-			console.log("UPDATE2 endpoint: " + endpoint);
-			this.sendSocketNotification("UPDATE2", endpoint);
-		}
-	},
-
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
 		//console.log(notification);
-		if (notification === "STARTED") {
-			this.updateDom();
+		if (notification === "NUTRISLICE_STARTED") {
 		}
-		else if (notification === "DATA") {
-			// set dataNotification
-			this.dataNotification = JSON.parse(payload);
+		else if (notification === "CURRENT_WEEK_MENU") {
+			// set dataNotification for current week
+			this.dataNotification = payload;
 			console.log("start date 1", this.dataNotification.start_date);
-			//this.retryCnt = 0;
-			this.sendDataRequest(false);
-			//this.updateDom();
+			this.retryCnt = 0;
+			this.sendSocketNotification("FETCH_NEXT_WEEK_MENU",this.menuProvider.getMenuData(false))
 		}
-		else if (notification === "DATA2") {
-			// set dataNotification
-			this.dataNotification2 = JSON.parse(payload);
+		else if (notification === "NEXT_WEEK_MENU") {
+			// set dataNotification for next week
+			this.dataNotification2 = payload;
 			console.log("start date 2", this.dataNotification2.start_date);
-			//this.retryCnt = 0;
+			this.retryCnt = 0;
 			this.updateDom();
 			this.scheduleUpdate();
 		}
 		else if (notification === "STATUSERROR") {
 			console.log(payload);
-			//this.retryCnt ++;
+			this.retryCnt ++;
 			this.scheduleUpdate(this.config.retryDelay);
 		}
-		else if (notification === "GETDATATIMEOUT") {
-			console.log("timeout");
-			//this.retryCnt ++;
-		}
-	},
+	}
 });
