@@ -15,7 +15,13 @@ Module.register("MMM-nutrislice-menu", {
 		itemLimit: 0,
 		showPast: true,
 		daysToShow: 5,
-		retryLimit: 10
+		retryLimit: 10,
+		dayText: {
+			"Day 1":"1-PE",
+			"Day 2":"2-Art & Science",
+			"Day 3":"3-PE & Henry Library",
+			"Day 4":"4-Music & Deb Library"
+		}
 	},
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
@@ -181,8 +187,8 @@ Module.register("MMM-nutrislice-menu", {
 				var dayObj = {dayOfWeek: this.getWeekDay(days[key].date)};
 				for (itemKey in Object.keys(day.menu_items)) {
 					var item = day.menu_items[itemKey];
-					if (item.text && (item.text.startsWith("Day") || item.text.startsWith("Hybrid"))) {
-						dayObj["activityDay"] = item.text;
+					if (item.text in this.config.dayText) {
+						dayObj["activityDay"] = this.config.dayText[item.text];
 					}
 					if (item.food && item.food.name) {
 						listOfFood.push(item.food.name);
