@@ -1,5 +1,24 @@
 {
   "TITLE": "Titulo",
   "UPDATE": "Actualización",
-  "NO_MORE_RETRY": "API failures have exceeded the RetryLimit"
+  "NO_MORE_RETRY": "API failures have exceeded the RetryLimit",
+  "WEEKDAYS_LONG": [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+		"Friday",
+		"Saturday",
+    "Sunday"
+  ],
+  "WEEKDAYS_SHORT": [
+    "Mon",
+    "Tues",
+    "Wed",
+    "Thurs",
+		"Fri",
+		"Sat",
+    "Sun"
+  ]
+
 }
