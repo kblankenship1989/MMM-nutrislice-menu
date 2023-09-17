@@ -22,7 +22,8 @@ Module.register("MMM-nutrislice-menu", {
 			"Day 3":"3-PE & Henry Library",
 			"Day 4":"4-Music & Deb Library"
 		},
-		showMenuText: true
+		showMenuText: true,
+		weekdayShort: true
 	},
 
 	menuProvider: null,
@@ -169,7 +170,15 @@ Module.register("MMM-nutrislice-menu", {
 	},
 	getWeekDay: function (dateString) {
 		const date = new Date(dateString);
-		var weekday = this.translate("WEEKDAYS_SHORT")
+		if (this.config.weekdayShort ){
+			var weekday = this.translate("WEEKDAYS_SHORT");
+			return weekday[date.getDay()];
+		}
+		else {
+			var weekday = this.translate("WEEKDAYS_LONG");
+			return weekday[date.getDay()];
+		}
+		
 		/*var weekday = new Array(7);
 		weekday[6] = "Sunday";
 		weekday[0] = "Monday";
@@ -177,8 +186,8 @@ Module.register("MMM-nutrislice-menu", {
 		weekday[2] = "Wednesday";
 		weekday[3] = "Thursday";
 		weekday[4] = "Friday";
-		weekday[5] = "Saturday";*/
-		return weekday[date.getDay()];
+		weekday[5] = "Saturday";
+		return weekday[date.getDay()];*/
 	},
 	getMapOfDays: function (days) {
 		const mapOfDays = [];
