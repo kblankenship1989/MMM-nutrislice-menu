@@ -7,7 +7,6 @@
 
 var NodeHelper = require("node_helper");
 const Log = require("logger");
-const fetch = require("fetch");
 
 module.exports = NodeHelper.create({
 

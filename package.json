@@ -6,6 +6,7 @@
   "author": "Blankenship Mirror",
   "license": "MIT",
   "devDependencies": {
+    "fetch": "latest",
     "grunt": "latest",
     "grunt-eslint": "latest",
     "grunt-jsonlint": "latest",
@@ -16,5 +17,8 @@
     "request": "latest",
     "stylelint-config-standard": "latest",
     "time-grunt": "latest"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
